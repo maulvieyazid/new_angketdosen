@@ -56,6 +56,11 @@ class Karyawan extends Authenticatable
             $builder->select('NIK', 'NAMA', 'BAGIAN', 'STATUS', 'KARY_TYPE');
         });
 
+        // NAMA_LENGKAP
+        static::addGlobalScope('nama_lengkap', function (Builder $builder) {
+            $builder->selectRaw("NAMA_DOSEN(NIK) AS NAMA_LENGKAP");
+        });
+
         // IS_DEKAN
         static::addGlobalScope('is_dekan', function (Builder $builder) {
             $fakultas = Fakultas::make()->getTable();
