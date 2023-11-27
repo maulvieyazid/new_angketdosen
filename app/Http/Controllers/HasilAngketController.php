@@ -10,4 +10,9 @@ class HasilAngketController extends Controller
     {
         return view('hasil-angket.index');
     }
+
+    function detail($smt, $nik)
+    {
+        return view('hasil-angket.detail');
+    }
 }
