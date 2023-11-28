@@ -3,9 +3,12 @@
 @section('html_title', 'Hasil Angket')
 
 @push('css')
+    <!-- Select2 -->
     <link href="{{ asset('assets/libs/select2/select2.min.css') }}" rel="stylesheet" />
-
+    <!-- Select2 Bootstrap 5 Theme -->
     <link href="{{ asset('assets/libs/select2/theme/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet" />
+    <!-- Datatables Bootstrap 5 Theme -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/datatables/dataTables.bootstrap5.min.css') }}" />
 @endpush
 
 @section('content')
@@ -70,7 +73,7 @@
                             <div class="card-body">
                                 <h3 class="card-title">Dosen mengajar di semester 231</h3>
                                 <div class="table-responsive">
-                                    <table class="table table-vcenter card-table table-striped table-hover table-group-divider table-bordered">
+                                    <table class="table table-vcenter card-table table-striped table-hover table-group-divider table-bordered" id="tabelDosen">
                                         <thead>
                                             <tr>
                                                 <th class="bg-primary-subtle text-center" style="width: 10%">
@@ -129,13 +132,20 @@
 
 
 @push('js')
+    <!-- Select2 -->
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
+    <!-- Datatables -->
+    <script src="{{ asset('assets/libs/datatables/jquery.dataTables.min.js') }}"></script>
+    <!-- Datatables Bootstrap 5 Theme -->
+    <script src="{{ asset('assets/libs/datatables/dataTables.bootstrap5.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
             $('#pilihSmt').select2({
                 theme: 'bootstrap-5'
             });
+
+            $('#tabelDosen').DataTable();
         });
     </script>
 
