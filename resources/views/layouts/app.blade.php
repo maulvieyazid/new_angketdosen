@@ -52,6 +52,10 @@
     <!-- Sweet Alert -->
     <script src="{{ asset('assets/libs/sweetalert2/sweetalert2@11.7.32.min.js') }}" defer></script>
 
+    <!-- Jquery -->
+    <script src="{{ asset('assets/libs/jquery/jquery-3.7.1.min.js') }}"></script>
+
+
     @stack('js')
 
 </body>
