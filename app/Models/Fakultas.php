@@ -14,4 +14,11 @@ class Fakultas extends Model
     public $timestamps = false;
 
     public $incrementing = false;
+
+
+    // SCOPE
+    public function scopeAktif($query)
+    {
+        return $query->where('sts_aktif', 'Y');
+    }
 }
