@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AngketTf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class HasilAngketController extends Controller
 {
@@ -29,8 +30,20 @@ class HasilAngketController extends Controller
         return view('hasil-angket.index', compact('semuaSmt', 'semuaDosen'));
     }
 
-    function detail($smt, $nik)
+    /**
+     * Menampilkan detil hasil angket
+     *
+     * @param string $data Bernilai enkripsi sebuah json yang berstruktur seperti berikut:
+     * [
+     *    "smt" => Semester,
+     *    "nik" => NIK Dosen yang dipilih,
+     * ]
+     */
+    function detail($data)
     {
+        $data = Crypt::decryptString($data);
+        $data = json_decode($data, false); // <- false untuk menjadikan object
+        // dd($data);
         return view('hasil-angket.detail');
     }
 }

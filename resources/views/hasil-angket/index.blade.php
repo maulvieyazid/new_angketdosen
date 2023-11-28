@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/datatables/dataTables.bootstrap5.min.css') }}" />
 @endpush
 
+@php
+    use Illuminate\Support\Facades\Crypt;
+@endphp
+
 @section('content')
     <div class="page-wrapper">
 
@@ -100,10 +104,14 @@
                                                     </td>
                                                     <td>
                                                         @php
-                                                            $route = route('detail.hasil-angket', [
+                                                            $data = json_encode([
                                                                 'smt' => request('smt'),
                                                                 'nik' => $dosen->nik,
                                                             ]);
+
+                                                            $data = Crypt::encryptString($data);
+
+                                                            $route = route('detail.hasil-angket', $data);
                                                         @endphp
                                                         <a href="{{ $route }}" class="btn btn-outline-primary w-100 btn-sm">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"

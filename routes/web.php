@@ -31,5 +31,5 @@ Route::middleware(['auth'])->group(function () {
     })->name('home');
 
     Route::get('/hasil-angket', [HasilAngketController::class, 'index'])->name('index.hasil-angket');
-    Route::get('/hasil-angket/detail/{smt}/{nik}', [HasilAngketController::class, 'detail'])->name('detail.hasil-angket');
+    Route::get('/hasil-angket/detail/{data}', [HasilAngketController::class, 'detail'])->name('detail.hasil-angket');
 });
