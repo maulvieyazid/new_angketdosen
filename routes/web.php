@@ -32,4 +32,5 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/hasil-angket', [HasilAngketController::class, 'index'])->name('index.hasil-angket');
     Route::get('/hasil-angket/detail/{data}', [HasilAngketController::class, 'detail'])->name('detail.hasil-angket');
+    Route::get('/hasil-angket/download/excel/{smt}', [HasilAngketController::class, 'downloadExcel'])->name('download-excel.hasil-angket');
 });

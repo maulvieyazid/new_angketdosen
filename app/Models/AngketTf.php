@@ -102,8 +102,7 @@ class AngketTf extends Model
             ->where('smt', $smt)
             ->where('nik', $nik)
             ->groupBy('kode_mk', 'kelas', 'prodi')
-            ->orderBy('kode_mk')
-            ->orderBy('prodi');
+            ->orderBy('kode_mk')->orderBy('prodi');
     }
 
     /**
@@ -119,5 +118,19 @@ class AngketTf extends Model
             ->where('smt', $smt)
             ->where('nik', $nik)
             ->groupBy('kode_mk', 'kelas', 'prodi', 'kd_angket');
+    }
+
+
+    public function scopeHasilPerKelasPerDosen($query, $smt, $nik)
+    {
+        return $query
+            ->select('kode_mk', 'kelas', 'prodi', 'nik')
+            ->selectRaw('find_nama_mk(kode_mk) as nama_mk')
+            ->selectRaw('find_nama_karyawan(nik) AS nama_dosen')
+            ->selectRaw('round(avg(nilai), 2) as nilai')
+            ->where('smt', $smt)
+            ->whereIn('nik', $nik)
+            ->groupBy('kode_mk', 'kelas', 'prodi', 'nik')
+            ->orderBy('nik')->orderBy('kode_mk')->orderBy('prodi');
     }
 }

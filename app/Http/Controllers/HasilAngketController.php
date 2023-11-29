@@ -7,10 +7,11 @@ use App\Models\AngketTf;
 use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Shuchkin\SimpleXLSXGen;
 
 class HasilAngketController extends Controller
 {
-    function index(Request $req)
+    public function index(Request $req)
     {
         // Ambil semua smt yg ada di angkettf untuk dimasukkan ke select
         $semuaSmt = AngketTf::select('smt')
@@ -41,7 +42,7 @@ class HasilAngketController extends Controller
      *    "nik" => NIK Dosen yang dipilih,
      * ]
      */
-    function detail($data)
+    public function detail($data)
     {
         // Decrypt dan lakukan decode pada data
         $data = Crypt::decryptString($data);
@@ -85,5 +86,88 @@ class HasilAngketController extends Controller
             'hasilPerKelasPerPertanyaan',
             'semuaJwbnEsai'
         ));
+    }
+
+
+    public function downloadExcel($smt)
+    {
+        // Ambil nik-nik dosen yang bisa dilihat oleh user yang login
+        $nik = AngketTf::dosenMengajarDiSmt($smt)->get()->pluck('nik')->all();
+
+        // Ambil hasil angker per kelas per dosen sesuai dengan smt dan nik yang diberikan
+        $hasilPerKelasPerDosen = AngketTf::query()
+            ->hasilPerKelasPerDosen($smt, $nik)
+            ->with(['karyawan' => function ($karyawan) {
+                $karyawan->select('nik', 'bagian')->with('departemen');
+            }])
+            ->get();
+
+        // Ambil semua jawaban esai
+        $semuaJwbnEsai = AngketTf::query()
+            ->where('smt', $smt)
+            ->whereIn('nik', $nik)
+            ->whereNotNull('saran')
+            ->whereRelation('pertanyaan', 'jenis', AngketMf::ISIAN_BEBAS)
+            ->get();
+
+
+        // Set header
+        $data = [
+            [
+                '<style border="thin"><center>' . "Semester" . '</center></style>',
+                '<style border="thin"><center>' . "Prodi" . '</center></style>',
+                '<style border="thin"><center>' . "NIK" . '</center></style>',
+                '<style border="thin"><center>' . "Nama Dosen" . '</center></style>',
+                '<style border="thin"><center>' . "Bagian" . '</center></style>',
+                '<style border="thin"><center>' . "Kode MK" . '</center></style>',
+                '<style border="thin"><center>' . "Nama MK" . '</center></style>',
+                '<style border="thin"><center>' . "Kelas" . '</center></style>',
+                '<style border="thin"><center>' . "Nilai Rata-rata" . '</center></style>',
+                '<style border="thin"><center>' . "Keluhan" . '</center></style>',
+            ],
+        ];
+
+        foreach ($hasilPerKelasPerDosen as $hpkpd) {
+
+            // Filter jawaban esai sesuai matakuliah dan dosen
+            // Lalu gabungkan dengan pemisah " | "
+            $keluhan = $semuaJwbnEsai
+                ->where('kode_mk', $hpkpd->kode_mk)
+                ->where('kelas', $hpkpd->kelas)
+                ->where('prodi', $hpkpd->prodi)
+                ->where('nik', $hpkpd->nik)
+                ->implode('saran', ' | ');
+
+            $data[] = [
+                $smt,
+                $hpkpd->prodi,
+                $hpkpd->nik,
+                $hpkpd->nama_dosen,
+                $hpkpd->karyawan->departemen->nama ?? null,
+                '<center>' . $hpkpd->kode_mk . '</center>',
+                $hpkpd->nama_mk,
+                '<center>' . $hpkpd->kelas . '</center>',
+                '<center>' . $hpkpd->nilai . '</center>',
+                $keluhan,
+            ];
+        }
+
+
+
+        $xlsx = SimpleXLSXGen::fromArray($data);
+        $xlsx->setDefaultFontSize(11);
+
+        /* Set width column */
+        $xlsx->setColWidth(1, 10); // <- Semester
+        $xlsx->setColWidth(2, 9); // <- Prodi
+        $xlsx->setColWidth(3, 10); // <- NIK
+        $xlsx->setColWidth(4, 34); // <- Nama Dosen
+        $xlsx->setColWidth(5, 41); // <- Bagian
+        $xlsx->setColWidth(6, 9); // <- Kode MK
+        $xlsx->setColWidth(7, 38); // <- Nama MK
+        $xlsx->setColWidth(8, 6); // <- Kelas
+        $xlsx->setColWidth(9, 14); // <- Nilai Rata-rata
+
+        $xlsx->downloadAs("Hasil Angket Per Kelas Per Dosen Semester $smt.xlsx");
     }
 }
