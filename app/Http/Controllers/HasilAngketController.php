@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AngketMf;
 use App\Models\AngketTf;
+use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 
@@ -41,9 +43,47 @@ class HasilAngketController extends Controller
      */
     function detail($data)
     {
+        // Decrypt dan lakukan decode pada data
         $data = Crypt::decryptString($data);
         $data = json_decode($data, false); // <- false untuk menjadikan object
-        // dd($data);
-        return view('hasil-angket.detail');
+
+        $smt = $data->smt;
+
+        // Ambil data dosen
+        $dosen = Karyawan::query()
+            ->withoutGlobalScopes()
+            ->where('nik', $data->nik)
+            ->select('nik', 'nama')
+            ->getNamaLengkap()
+            ->first();
+
+        // Ambil hasil angket per kelas
+        $hasilPerKelas = AngketTf::query()
+            ->hasilPerKelas($data->smt, $data->nik)
+            ->with('prodiAngket')
+            ->get();
+
+        // Ambil hasil angket per kelas per pertanyaan
+        // NOTE : nilai angket yang dipakai hanya yang pilihan ganda, karena yg esai tidak ada nilai nya
+        $hasilPerKelasPerPertanyaan = AngketTf::query()
+            ->hasilPerKelasPerPertanyaan($data->smt, $data->nik)
+            ->with('pertanyaan')
+            ->get();
+
+        // Ambil semua jawaban esai untuk ditampilkan di view
+        $semuaJwbnEsai = AngketTf::query()
+            ->where('nik', $data->nik)
+            ->where('smt', $data->smt)
+            ->whereNotNull('saran')
+            ->whereRelation('pertanyaan', 'jenis', AngketMf::ISIAN_BEBAS)
+            ->get();
+
+        return view('hasil-angket.detail', compact(
+            'smt',
+            'dosen',
+            'hasilPerKelas',
+            'hasilPerKelasPerPertanyaan',
+            'semuaJwbnEsai'
+        ));
     }
 }

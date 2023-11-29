@@ -2,6 +2,9 @@
 
 @section('html_title', 'Detail Hasil Angket')
 
+@php
+    use App\Models\AngketMf;
+@endphp
 
 @section('content')
     <div class="page-wrapper">
@@ -14,7 +17,7 @@
 
                 <div class="row g-2 align-items-center">
                     <div class="col">
-                        <a href="{{ route('index.hasil-angket') }}" class="btn btn-secondary mb-3">
+                        <a href="{{ route('index.hasil-angket', ['smt' => $smt]) }}" class="btn btn-secondary mb-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-narrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                                 stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -54,7 +57,7 @@
                                         <path d="M11 15h1"></path>
                                         <path d="M12 15v3"></path>
                                     </svg>
-                                    <span class="ms-2">Semester</span> : <strong>231</strong>
+                                    <span class="ms-2">Semester</span> : <strong>{{ $smt }}</strong>
                                 </div>
                                 <div class="mb-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -66,7 +69,7 @@
                                         <path d="M15 12l2 0"></path>
                                         <path d="M7 16l10 0"></path>
                                     </svg>
-                                    <span class="ms-2">NIK</span> : <strong>980249</strong>
+                                    <span class="ms-2">NIK</span> : <strong>{{ $dosen->nik }}</strong>
                                 </div>
                                 <div class="mb-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id-badge-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -78,7 +81,7 @@
                                         <path d="M14 16h2"></path>
                                         <path d="M14 12h4"></path>
                                     </svg>
-                                    <span class="ms-2">Nama</span> : <strong>Erwin Sutomo, S.Kom., M.Eng., CITSM</strong>
+                                    <span class="ms-2">Nama</span> : <strong>{{ $dosen->nama_lengkap }}</strong>
                                 </div>
 
                             </div>
@@ -125,14 +128,28 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td class="text-center">1.</td>
-                                                        <td>S1-SI (41010)</td>
-                                                        <td class="text-center">36583</td>
-                                                        <td>Manajemen Layanan Teknologi Informasi</td>
-                                                        <td class="text-center">P1</td>
-                                                        <td class="text-center">4</td>
-                                                    </tr>
+                                                    @foreach ($hasilPerKelas as $hasil)
+                                                        <tr>
+                                                            <td class="text-center">
+                                                                {{ $loop->iteration }}.
+                                                            </td>
+                                                            <td>
+                                                                {{ $hasil->prodiAngket->alias ?? null }} ({{ $hasil->prodi }})
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{ $hasil->kode_mk }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $hasil->nama_mk }}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{ $hasil->kelas }}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{ $hasil->nilai }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -158,12 +175,134 @@
                                     <div id="collapse-kls-prtyn" class="accordion-collapse collapse show" data-bs-parent="#accrdn-kls-prtyn">
                                         <div class="accordion-body pt-0">
 
-                                            <div>
+                                            @foreach ($hasilPerKelas as $hpk)
+                                                <div>
+                                                    <table class="table mb-0 table-warning">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="w-0">Kode MK</td>
+                                                                <td class="w-0">:</td>
+                                                                <td class="fw-bold">{{ $hpk->kode_mk }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Matakuliah</td>
+                                                                <td>:</td>
+                                                                <td class="fw-bold">{{ $hpk->nama_mk }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Prodi</td>
+                                                                <td>:</td>
+                                                                <td class="fw-bold">
+                                                                    {{ $hpk->prodiAngket->alias ?? null }} ({{ $hpk->prodi }})
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center bg-primary-subtle" style="width: 5%">
+                                                                    No.
+                                                                </th>
+                                                                <th class="text-center bg-primary-subtle">
+                                                                    Pertanyaan
+                                                                </th>
+                                                                <th class="text-center bg-primary-subtle">
+                                                                    Nilai
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        @php
+                                                            $no = 1;
+
+                                                            // Lakukan filter pada hasil per kelas per pertanyaan
+                                                            // Ambil yang kelas nya sesuai dengan looping kelas saat ini
+                                                            $hpkpp = $hasilPerKelasPerPertanyaan
+                                                                ->where('kode_mk', $hpk->kode_mk)
+                                                                ->where('kelas', $hpk->kelas)
+                                                                ->where('prodi', $hpk->prodi);
+
+                                                            // Pisahkan antara yang jenis nya pilihan ganda dan isian bebas
+                                                            $pilihanGanda = $hpkpp->where('pertanyaan.jenis', AngketMf::PIL_GANDA)->sortBy('kd_angket');
+
+                                                            $isianBebas = $hpkpp->where('pertanyaan.jenis', AngketMf::ISIAN_BEBAS)->sortBy('kd_angket');
+
+                                                            // Ambil nilai rata-rata dari pilihan ganda lalu bulatkan dengan presisi dua angka dibelakang koma
+                                                            $nilRataRata = round($pilihanGanda->avg('nilai'), 2);
+                                                        @endphp
+
+                                                        <tbody>
+                                                            @foreach ($pilihanGanda as $pilgan)
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}.
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $pilgan->pertanyaan->uraian ?? null }}
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        {{ $pilgan->nilai }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr class="table-secondary">
+                                                                <td colspan="2" class="text-end">
+                                                                    <span class="fw-bold">Nilai Rata-rata</span>
+                                                                </td>
+                                                                <td class="text-center fw-bold">
+                                                                    {{ $nilRataRata }}
+                                                                </td>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+
+                                                    @foreach ($isianBebas as $esai)
+                                                        <div class="fw-bold">
+                                                            {{ $no++ }}. {{ $esai->pertanyaan->uraian ?? null }}
+                                                        </div>
+
+                                                        @php
+                                                            // Lakukan filter pada semua jawaban esai
+                                                            // Ambil yang esai nya sesuai dengan looping esai saat ini
+                                                            $fltr_semuaJwbnEsai = $semuaJwbnEsai
+                                                                ->where('kode_mk', $esai->kode_mk)
+                                                                ->where('kelas', $esai->kelas)
+                                                                ->where('prodi', $esai->prodi)
+                                                                ->where('kd_angket', $esai->kd_angket);
+                                                        @endphp
+
+                                                        <table class="table table-bordered mt-2 border-0">
+                                                            @foreach ($fltr_semuaJwbnEsai as $sje)
+                                                                <tr>
+                                                                    <td class="py-2">
+                                                                        {{ $sje->saran }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+
+                                                            <!-- Kalo tidak ada jawaban esai nya, maka tampilkan 'Tidak ada jawaban' -->
+                                                            {{ !$fltr_semuaJwbnEsai->count() ? 'Tidak ada jawaban' : null }}
+                                                        </table>
+                                                    @endforeach
+
+                                                    <hr class="border-2 opacity-50 mt-7">
+
+                                                </div>
+                                            @endforeach
+
+
+
+                                            {{-- <div>
                                                 <table class="table mb-0 table-warning">
                                                     <tbody>
                                                         <tr>
-                                                            <td style="width: 0">Kode MK</td>
-                                                            <td style="width: 0">:</td>
+                                                            <td class="w-0">Kode MK</td>
+                                                            <td class="w-0">:</td>
                                                             <td class="fw-bold">36589</td>
                                                         </tr>
                                                         <tr>
@@ -237,7 +376,7 @@
                                                 </table>
                                             </div>
 
-                                            <hr class="border-2 opacity-50 my-7">
+                                            <hr class="border-2 opacity-50 my-7"> --}}
 
 
                                         </div>
