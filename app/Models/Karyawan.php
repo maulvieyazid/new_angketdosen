@@ -143,4 +143,9 @@ class Karyawan extends Authenticatable
     {
         return $query->where('status', 'A');
     }
+
+    public function scopeGetNamaLengkap($query)
+    {
+        return $query->selectRaw("NAMA_DOSEN(NIK) AS NAMA_LENGKAP");
+    }
 }
