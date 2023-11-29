@@ -248,8 +248,7 @@
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
-                                                        </tbody>
-                                                        <tfoot>
+
                                                             <tr class="table-secondary">
                                                                 <td colspan="2" class="text-end">
                                                                     <span class="fw-bold">Nilai Rata-rata</span>
@@ -258,7 +257,8 @@
                                                                     {{ $nilRataRata }}
                                                                 </td>
                                                             </tr>
-                                                        </tfoot>
+
+                                                        </tbody>
                                                     </table>
 
                                                     @foreach ($isianBebas as $esai)
