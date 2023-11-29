@@ -75,7 +75,7 @@
                     <div class="col">
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-between mb-3">
+                                <div class="d-md-flex justify-content-between mb-3">
                                     <h3 class="card-title">Dosen mengajar di semester 231</h3>
                                     <a href="{{ route('download-excel.hasil-angket', ['smt' => request('smt')]) }}" class="btn btn-success" target="_blank">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-type-xls" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
