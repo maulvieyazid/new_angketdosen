@@ -55,6 +55,37 @@
     <!-- Jquery -->
     <script src="{{ asset('assets/libs/jquery/jquery-3.7.1.min.js') }}"></script>
 
+    <!-- Axios -->
+    <script src="{{ asset('assets/libs/axios/axios.min.js') }}"></script>
+
+    <script>
+        // Untuk mengeset CSRF Token pada Header AXIOS
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrf_token() }}';
+
+        // Untuk melakukan retry pada Request Axios jika terjadi error
+        window.axios.interceptors.response.use(undefined, (err) => {
+            const {
+                config,
+                message
+            } = err;
+
+            if (!config || !config.retry) {
+                return Promise.reject(err);
+            }
+
+            config.retry -= 1;
+
+            const delayRetryRequest = new Promise((resolve) => {
+                setTimeout(() => {
+                    console.log('retry the request', config.url);
+                    resolve();
+                }, config.retryDelay || 1000);
+            });
+
+            return delayRetryRequest.then(() => axios(config));
+        });
+    </script>
+
 
     @stack('js')
 
