@@ -146,6 +146,6 @@ class Karyawan extends Authenticatable
 
     public function scopeGetNamaLengkap($query)
     {
-        return $query->selectRaw("NAMA_DOSEN(NIK) AS NAMA_LENGKAP");
+        return $query->selectRaw("AAK_MAN.NAMA_DOSEN(NIK) AS NAMA_LENGKAP");
     }
 }
