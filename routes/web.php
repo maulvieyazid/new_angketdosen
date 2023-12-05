@@ -1,12 +1,8 @@
 <?php
 
-use App\Http\Controllers\EvaluasiBeasiswaController;
 use App\Http\Controllers\HasilAngketController;
-use App\Http\Controllers\HistoriController;
-use App\Http\Controllers\KesimpulanBeasiswaController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\SyaratBeasiswaController;
-use App\Http\Controllers\SyaratPesertaBeasiswaController;
+use App\Http\Controllers\PertanyaanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,4 +29,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hasil-angket', [HasilAngketController::class, 'index'])->name('index.hasil-angket');
     Route::get('/hasil-angket/detail/{data}', [HasilAngketController::class, 'detail'])->name('detail.hasil-angket');
     Route::get('/hasil-angket/download/excel/{smt}', [HasilAngketController::class, 'downloadExcel'])->name('download-excel.hasil-angket');
+
+    Route::get('/pertanyaan', [PertanyaanController::class, 'index'])->name('index.pertanyaan');
+});
+
+
+
+Route::middleware(['auth_no_db'])->group(function () {
+    Route::put('/pertanyaan/update', [PertanyaanController::class, 'update'])->name('update.pertanyaan');
+    Route::put('/pertanyaan/change-status', [PertanyaanController::class, 'changeStatus'])->name('change-status.pertanyaan');
 });
