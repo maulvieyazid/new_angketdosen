@@ -15,7 +15,17 @@ class AngketMf extends Model
 
     protected $table = 'ANGKET_MF';
 
+    protected $primaryKey = 'kd_angket';
+
     public $timestamps = false;
 
     public $incrementing = false;
+
+    protected $fillable = [
+        'uraian',
+        'status',
+        'jenis',
+        'kd_induk',
+        'urut',
+    ];
 }
