@@ -33,6 +33,9 @@ class LoginController extends Controller
         // Set karyawan sebagai user auth
         auth()->login($karyawan);
 
+        // Tambah session untuk mengindikasikan bahwa user telah login
+        $req->session()->put('logged_in', true);
+
         // redirect ke halaman home / intended
         if (auth()->check()) return redirect()->intended('/');
     }
