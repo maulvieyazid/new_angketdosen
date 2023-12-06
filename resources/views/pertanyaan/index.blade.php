@@ -196,8 +196,8 @@
                         <div class="modal-body">
                             <div class="row mb-3 align-items-end">
                                 <div class="col">
-                                    <label class="form-label">Kode</label>
-                                    <input type="text" class="form-control" id="kd_angket" disabled>
+                                    <label class="form-label">Urut</label>
+                                    <input type="number" class="form-control" id="urut" min="1" oninput="$(this).val(Math.max(1, $(this).val()))">
                                 </div>
                             </div>
 
@@ -275,6 +275,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn me-auto" data-bs-dismiss="modal">
@@ -388,7 +389,7 @@
             const pertanyaan = $(btn).closest('div.data-pertanyaan').data('json-pertanyaan');
 
             // Set data pertanyaan ke input modal
-            $('#kd_angket').val(pertanyaan.kd_angket);
+            $('#urut').val(pertanyaan.urut);
             $('#uraian').val(pertanyaan.uraian);
             $(`input[type="radio"][name="jenis"][value="${pertanyaan.jenis}"]`).prop('checked', true);
             $('#status').prop('checked', parseInt(pertanyaan.status) ? true : false).trigger('change');
