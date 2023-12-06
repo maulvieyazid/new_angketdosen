@@ -14,7 +14,6 @@ class PertanyaanController extends Controller
         $pertanyaan = AngketMf::query()
             ->orderBy('status', 'desc')
             ->orderBy('urut')
-            ->orderBy('kd_angket')
             ->get();
 
         $inPeriodeAngket = NoSrKtr::inPeriodeAngket()->count();
