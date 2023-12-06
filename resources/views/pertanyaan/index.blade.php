@@ -66,7 +66,7 @@
                                     <table class="table table-striped table-hover table-bordered" id="tabelPertanyaan">
                                         <thead>
                                             <tr>
-                                                <th class="text-center bg-primary-subtle w-0">Kode</th>
+                                                <th class="text-center bg-primary-subtle w-0">Urut</th>
                                                 <th class="text-center bg-primary-subtle">Uraian</th>
                                                 <th class="text-center bg-primary-subtle" style="width: 14.5%">Jenis</th>
                                                 <th class="text-center bg-primary-subtle" style="width: 11%">Status</th>
@@ -89,7 +89,7 @@
 
                                                 <tr>
                                                     <td class="text-center">
-                                                        {{ $prtyn->kd_angket }}
+                                                        {{ $prtyn->urut }}
                                                     </td>
                                                     <td>
                                                         {{ $prtyn->uraian }}
