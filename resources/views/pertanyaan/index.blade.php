@@ -208,7 +208,7 @@
                             <div class="row mb-3 align-items-end">
                                 <div class="col">
                                     <label class="form-label">Uraian</label>
-                                    <textarea class="form-control" id="uraian" name="uraian"></textarea>
+                                    <textarea class="form-control" id="uraian" name="uraian" required></textarea>
                                 </div>
                             </div>
 
@@ -332,7 +332,7 @@
                             <div class="row mb-3 align-items-end">
                                 <div class="col">
                                     <label class="form-label">Uraian</label>
-                                    <textarea class="form-control" name="uraian"></textarea>
+                                    <textarea class="form-control" name="uraian" required></textarea>
                                 </div>
                             </div>
 
