@@ -13,6 +13,9 @@ class AngketMf extends Model
     const ISIAN_BEBAS = 'ESAI';
     const ISIAN_CAMPUR = 'CAMPUR';
 
+    const AKTIF = 1;
+    const NON_AKTIF = 0;
+
     protected $table = 'ANGKET_MF';
 
     protected $primaryKey = 'kd_angket';
