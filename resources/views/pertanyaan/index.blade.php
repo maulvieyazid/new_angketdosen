@@ -201,7 +201,7 @@
                             <div class="row mb-3 align-items-end">
                                 <div class="col">
                                     <label class="form-label">Urut</label>
-                                    <input type="number" class="form-control" id="urut" name="urut" min="1" oninput="$(this).val(Math.max(1, $(this).val()))">
+                                    <input type="number" class="form-control" id="urut" name="urut" min="1" required oninput="$(this).val(Math.max(1, $(this).val()))">
                                 </div>
                             </div>
 
@@ -217,7 +217,7 @@
                                     <label class="form-label">Jenis</label>
                                     <div class="form-selectgroup">
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="jenis" value="{{ AngketMf::PIL_GANDA }}" id="jenis_pg" class="form-selectgroup-input">
+                                            <input type="radio" name="jenis" value="{{ AngketMf::PIL_GANDA }}" id="jenis_pg" class="form-selectgroup-input" required>
                                             <span class="form-selectgroup-label">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-details" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -233,7 +233,7 @@
                                             </span>
                                         </label>
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_BEBAS }}" id="jenis_esai" class="form-selectgroup-input">
+                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_BEBAS }}" id="jenis_esai" class="form-selectgroup-input" required>
                                             <span class="form-selectgroup-label">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-writing" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -247,7 +247,7 @@
                                         </label>
 
                                         {{-- <label class="form-selectgroup-item">
-                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_CAMPUR }}" id="jenis_campur" class="form-selectgroup-input">
+                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_CAMPUR }}" id="jenis_campur" class="form-selectgroup-input" required>
                                             <span class="form-selectgroup-label">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-forms" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -325,7 +325,7 @@
                             <div class="row mb-3 align-items-end">
                                 <div class="col">
                                     <label class="form-label">Urut</label>
-                                    <input type="number" class="form-control" name="urut" min="1" oninput="$(this).val(Math.max(1, $(this).val()))" value="{{ $pertanyaan->where('status', AngketMf::AKTIF)->max('urut') + 1 }}">
+                                    <input type="number" class="form-control" name="urut" min="1" required oninput="$(this).val(Math.max(1, $(this).val()))" value="{{ $pertanyaan->where('status', AngketMf::AKTIF)->max('urut') + 1 }}">
                                 </div>
                             </div>
 
@@ -341,7 +341,7 @@
                                     <label class="form-label">Jenis</label>
                                     <div class="form-selectgroup">
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="jenis" value="{{ AngketMf::PIL_GANDA }}" class="form-selectgroup-input">
+                                            <input type="radio" name="jenis" value="{{ AngketMf::PIL_GANDA }}" class="form-selectgroup-input" checked required>
                                             <span class="form-selectgroup-label">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-details" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -357,7 +357,7 @@
                                             </span>
                                         </label>
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_BEBAS }}" class="form-selectgroup-input">
+                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_BEBAS }}" class="form-selectgroup-input" required>
                                             <span class="form-selectgroup-label">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-writing" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -371,7 +371,7 @@
                                         </label>
 
                                         {{-- <label class="form-selectgroup-item">
-                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_CAMPUR }}" class="form-selectgroup-input">
+                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_CAMPUR }}" class="form-selectgroup-input" required>
                                             <span class="form-selectgroup-label">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-forms" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
