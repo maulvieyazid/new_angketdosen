@@ -6,6 +6,7 @@ use App\Models\AngketMf;
 use App\Models\NoSrKtr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class PertanyaanController extends Controller
 {
@@ -108,7 +109,7 @@ class PertanyaanController extends Controller
      | @param $from Urutan pertanyaan dari mana
      | @param $to Urutan pertanyaan mau dipindah kemana
      */
-    function shiftUrutActive($from, $to)
+    private function shiftUrutActive($from, $to)
     {
         /*
          | Karena urutan ini ASC, maka bila urutannya semakin mendekati angka 1 maka dianggap NAIK, sebaliknya
@@ -185,5 +186,25 @@ class PertanyaanController extends Controller
         return response()->json([
             'status' => 'success'
         ]);
+    }
+
+    public function koreksiUrut()
+    {
+        $angketMf = AngketMf::make()->getTable();
+
+        $sql = "MERGE INTO $angketMf target
+                USING (
+                        SELECT kd_angket, urut, ROW_NUMBER() OVER (ORDER BY urut) AS new_urut
+                        FROM $angketMf
+                        WHERE STATUS = 1 AND URUT IS NOT NULL
+                ) sumber
+                ON (target.kd_angket = sumber.kd_angket)
+                WHEN MATCHED THEN
+                    UPDATE SET target.urut = sumber.new_urut
+        ";
+
+        DB::statement($sql);
+
+        return redirect()->route('index.pertanyaan')->with('success', 'Urutan pertanyaan berhasil dikoreksi.');
     }
 }

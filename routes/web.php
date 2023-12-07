@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::middleware(['auth_no_db'])->group(function () {
+    Route::get('/pertanyaan/correction/urut', [PertanyaanController::class, 'koreksiUrut'])->name('koreksi-urut.pertanyaan');
     Route::post('/pertanyaan/store', [PertanyaanController::class, 'store'])->name('store.pertanyaan');
     Route::put('/pertanyaan/update', [PertanyaanController::class, 'update'])->name('update.pertanyaan');
     Route::put('/pertanyaan/change-status', [PertanyaanController::class, 'changeStatus'])->name('change-status.pertanyaan');
