@@ -95,7 +95,7 @@ class AngketTf extends Model
      */
     public function scopeHasilPerKelas($query, $smt, $nik)
     {
-        return $query
+        $query = $query
             ->select('kode_mk', 'kelas', 'prodi')
             ->selectRaw('find_nama_mk(kode_mk) as nama_mk')
             ->selectRaw('round(avg(nilai), 2) as nilai')
@@ -103,6 +103,32 @@ class AngketTf extends Model
             ->where('nik', $nik)
             ->groupBy('kode_mk', 'kelas', 'prodi')
             ->orderBy('kode_mk')->orderBy('prodi');
+
+        $user = auth()->user();
+
+        /*
+         | Kalau user yang login adalah Dekan atau Kaprodi, maka
+         | Ambil semua kelas yang ada di prodi nya mereka
+         */
+        $cekDekapr = in_array(1, [$user->is_dekan, $user->is_kaprodi]);
+        if ($cekDekapr) {
+            $query = $query
+                // Bungkus di dalam satu where
+                ->where(function ($query) use ($user) {
+                    $query
+                        // Ambil angketTf yang prodi nya aktif dan mngr_id nya adalah nik user yg login
+                        ->whereHas('prodiAngket', function (Builder $prodi) use ($user) {
+                            $prodi->aktif()->where('mngr_id', $user->nik);
+                        })
+                        // ATAU
+                        // Ambil angketTf yang prodi nya ada di fakultas yang aktif dan mngr_id nya adalah nik user yg login
+                        ->orWhereHas('prodiAngket.fakultas', function (Builder $fakultas) use ($user) {
+                            $fakultas->aktif()->where('mngr_id', $user->nik);
+                        });
+                });
+        }
+
+        return $query;
     }
 
     /**
