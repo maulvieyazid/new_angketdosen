@@ -23,7 +23,41 @@ class PertanyaanController extends Controller
 
     public function store(Request $req)
     {
-        dd($req->all());
+        $failure = function ($message) {
+            return redirect()->route('index.pertanyaan')->with('danger', $message);
+        };
+
+        // Jika uraian kosong
+        if (!$req->uraian) return $failure('Uraian tidak boleh kosong.');
+
+        // Validasi Jenis
+        if (!in_array($req->jenis, [
+            AngketMf::PIL_GANDA,
+            AngketMf::ISIAN_BEBAS,
+            AngketMf::ISIAN_CAMPUR,
+        ])) return $failure('Jenis tidak valid.');
+
+        // Cast inputan urut ke int
+        $urut = (int) $req->urut;
+        // Kalo nilai nya 0, maka
+        if (!$urut) return $failure('Urut tidak boleh 0.');
+
+        // Geser urutan lainnya, agar urutan yang baru bisa menempati urutan yang diinginkan
+        $this->shiftUrutActive(null, $urut);
+
+        // Generate kd_angket
+        $newkode = AngketMf::max('kd_angket') + 1;
+
+        // Insert
+        AngketMf::create([
+            'kd_angket' => $newkode,
+            'uraian'    => $req->uraian,
+            'status'    => isset($req->status) ? 1 : 0,
+            'jenis'     => $req->jenis,
+            'urut'      => $urut,
+        ]);
+
+        return redirect()->route('index.pertanyaan')->with('success', 'Pertanyaan berhasil ditambahkan.');
     }
 
     public function update(Request $req)

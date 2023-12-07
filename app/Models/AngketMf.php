@@ -25,6 +25,7 @@ class AngketMf extends Model
     public $incrementing = false;
 
     protected $fillable = [
+        'kd_angket',
         'uraian',
         'status',
         'jenis',
