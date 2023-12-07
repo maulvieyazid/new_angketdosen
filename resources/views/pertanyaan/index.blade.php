@@ -197,7 +197,7 @@
                             <div class="row mb-3 align-items-end">
                                 <div class="col">
                                     <label class="form-label">Urut</label>
-                                    <input type="number" class="form-control" id="urut" min="1" oninput="$(this).val(Math.max(1, $(this).val()))">
+                                    <input type="number" class="form-control" id="urut" name="urut" min="1" oninput="$(this).val(Math.max(1, $(this).val()))">
                                 </div>
                             </div>
 
@@ -398,6 +398,11 @@
             const encPertanyaan = $(btn).closest('div.data-pertanyaan').data('enc-pertanyaan');
             // Set ke input modal
             $('#encPrtyn').val(encPertanyaan);
+
+            // Tutup submitBtn di modal
+            $('#submitBtn').addClass('d-none');
+            // Buka confirmationBtn di modal
+            $('#confirmationBtn').removeClass('d-none');
 
             // Buka modal nya
             const modalEditPrtyn = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalEditPrtyn'));
