@@ -21,6 +21,11 @@ class PertanyaanController extends Controller
         return view('pertanyaan.index', compact('pertanyaan', 'inPeriodeAngket'));
     }
 
+    public function store(Request $req)
+    {
+        dd($req->all());
+    }
+
     public function update(Request $req)
     {
         // Lakukan dekripsi pada data pertanyaan yg dienkripsi

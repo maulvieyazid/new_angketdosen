@@ -62,6 +62,10 @@
                     <div class="col">
                         <div class="card">
                             <div class="card-body">
+                                <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modalTambahPrtyn">
+                                    + Pertanyaan
+                                </button>
+
                                 <div class="table-responsive">
                                     <table class="table table-striped table-hover table-bordered" id="tabelPertanyaan">
                                         <thead>
@@ -187,7 +191,7 @@
                         <h5 class="modal-title">Ubah Pertanyaan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('update.pertanyaan') }}" method="POST" onsubmit="$('#submitBtn button').prop('disabled', true)">
+                    <form action="{{ route('update.pertanyaan') }}" method="POST" onsubmit="$('#modalEditPrtyn #submitBtn button').prop('disabled', true)">
                         @csrf
                         @method('PUT')
 
@@ -267,7 +271,7 @@
                                     <label class="form-label">Status</label>
                                     <div class="d-flex align-items-center">
                                         <div class="form-check form-switch mb-0 me-2">
-                                            <input class="form-check-input" type="checkbox" name="status" id="status" onchange="toggleStatusModal(this)">
+                                            <input class="form-check-input" type="checkbox" name="status" id="status" onchange="$('#modalEditPrtyn #statusBadge').html(this.checked ? badge_aktif : badge_non_aktif)">
                                         </div>
                                         <div id="statusBadge">
                                             <span class="badge bg-danger me-1"></span> Non Aktif
@@ -277,11 +281,12 @@
                             </div>
 
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn me-auto" data-bs-dismiss="modal">
                                 Tutup
                             </button>
-                            <button type="button" class="btn btn-primary" id="confirmationBtn" onclick="$('#submitBtn').removeClass('d-none'); $(this).addClass('d-none')">
+                            <button type="button" class="btn btn-primary" id="confirmationBtn" onclick="$('#modalEditPrtyn #submitBtn').removeClass('d-none'); $(this).addClass('d-none')">
                                 Ubah Pertanyaan
                             </button>
                             <div class="d-flex flex-column d-none" id="submitBtn">
@@ -290,7 +295,7 @@
                                     <button type="submit" class="btn btn-success">
                                         Yakin
                                     </button>
-                                    <button type="button" class="btn btn-secondary" onclick="$('#confirmationBtn').removeClass('d-none'); $('#submitBtn').addClass('d-none')">
+                                    <button type="button" class="btn btn-secondary" onclick="$('#modalEditPrtyn #confirmationBtn').removeClass('d-none'); $('#modalEditPrtyn #submitBtn').addClass('d-none')">
                                         Batal
                                     </button>
                                 </div>
@@ -301,6 +306,132 @@
             </div>
         </div>
         <!-- Modal Ubah Pertanyaan -->
+
+
+
+
+        <!-- Modal Tambah Pertanyaan -->
+        <div class="modal modal-blur fade" id="modalTambahPrtyn" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tambah Pertanyaan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('store.pertanyaan') }}" method="POST" onsubmit="$('#modalTambahPrtyn #submitBtn button').prop('disabled', true)">
+                        @csrf
+
+                        <div class="modal-body">
+                            <div class="row mb-3 align-items-end">
+                                <div class="col">
+                                    <label class="form-label">Urut</label>
+                                    <input type="number" class="form-control" name="urut" min="1" oninput="$(this).val(Math.max(1, $(this).val()))" value="{{ $pertanyaan->where('status', AngketMf::AKTIF)->max('urut') + 1 }}">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-end">
+                                <div class="col">
+                                    <label class="form-label">Uraian</label>
+                                    <textarea class="form-control" name="uraian"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-end">
+                                <div class="col">
+                                    <label class="form-label">Jenis</label>
+                                    <div class="form-selectgroup">
+                                        <label class="form-selectgroup-item">
+                                            <input type="radio" name="jenis" value="{{ AngketMf::PIL_GANDA }}" class="form-selectgroup-input">
+                                            <span class="form-selectgroup-label">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-details" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M13 5h8" />
+                                                    <path d="M13 9h5" />
+                                                    <path d="M13 15h8" />
+                                                    <path d="M13 19h5" />
+                                                    <path d="M3 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                                                    <path d="M3 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                                                </svg>
+                                                Pilihan Ganda
+                                            </span>
+                                        </label>
+                                        <label class="form-selectgroup-item">
+                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_BEBAS }}" class="form-selectgroup-input">
+                                            <span class="form-selectgroup-label">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-writing" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M20 17v-12c0 -1.121 -.879 -2 -2 -2s-2 .879 -2 2v12l2 2l2 -2z" />
+                                                    <path d="M16 7h4" />
+                                                    <path d="M18 19h-13a2 2 0 1 1 0 -4h4a2 2 0 1 0 0 -4h-3" />
+                                                </svg>
+                                                Isian Bebas
+                                            </span>
+                                        </label>
+
+                                        {{-- <label class="form-selectgroup-item">
+                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_CAMPUR }}" class="form-selectgroup-input">
+                                            <span class="form-selectgroup-label">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-forms" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M12 3a3 3 0 0 0 -3 3v12a3 3 0 0 0 3 3" />
+                                                    <path d="M6 3a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3" />
+                                                    <path d="M13 7h7a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-7" />
+                                                    <path d="M5 7h-1a1 1 0 0 0 -1 1v8a1 1 0 0 0 1 1h1" />
+                                                    <path d="M17 12h.01" />
+                                                    <path d="M13 12h.01" />
+                                                </svg>
+                                                Campur
+                                            </span>
+                                        </label> --}}
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-end">
+                                <div class="col">
+                                    <label class="form-label">Status</label>
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-check form-switch mb-0 me-2">
+                                            <input class="form-check-input" type="checkbox" name="status" checked onchange="$('#modalTambahPrtyn #statusBadge').html(this.checked ? badge_aktif : badge_non_aktif)">
+                                        </div>
+                                        <div id="statusBadge">
+                                            <span class="badge bg-success me-1"></span> Aktif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn me-auto" data-bs-dismiss="modal">
+                                Tutup
+                            </button>
+                            <button type="button" class="btn btn-primary" id="confirmationBtn" onclick="$('#modalTambahPrtyn #submitBtn').removeClass('d-none'); $(this).addClass('d-none')">
+                                Ubah Pertanyaan
+                            </button>
+                            <div class="d-flex flex-column d-none" id="submitBtn">
+                                <span>Apakah anda yakin?</span>
+                                <div>
+                                    <button type="submit" class="btn btn-success">
+                                        Yakin
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="$('#modalTambahPrtyn #confirmationBtn').removeClass('d-none'); $('#modalTambahPrtyn #submitBtn').addClass('d-none')">
+                                        Batal
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Tambah Pertanyaan -->
 
     </div>
 
@@ -376,13 +507,6 @@
 
         }
 
-        function toggleStatusModal(checkbox) {
-            // Ambil elemen yang id nya "statusBadge"
-            $('#statusBadge')
-                // Ubah isi nya sesuai dengan checkbox nya tercentang atau tidak
-                .html(checkbox.checked ? badge_aktif : badge_non_aktif);
-        }
-
 
         function edit(btn) {
             // Ambil data pertanyaan di div yang memiliki class "data-pertanyaan" pada atribut "data-json-pertanyaan"
@@ -399,10 +523,10 @@
             // Set ke input modal
             $('#encPrtyn').val(encPertanyaan);
 
-            // Tutup submitBtn di modal
-            $('#submitBtn').addClass('d-none');
-            // Buka confirmationBtn di modal
-            $('#confirmationBtn').removeClass('d-none');
+            // Tutup submitBtn di modal edit
+            $('#modalEditPrtyn #submitBtn').addClass('d-none');
+            // Buka confirmationBtn di modal edit
+            $('#modalEditPrtyn #confirmationBtn').removeClass('d-none');
 
             // Buka modal nya
             const modalEditPrtyn = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalEditPrtyn'));
