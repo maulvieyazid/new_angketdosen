@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Gate;
+namespace App\Http\Controllers\API\Gate;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\Controller;
 use App\Models\AngketMf;
+use App\Models\Krs;
 use Illuminate\Http\Request;
 
 class AngketDosenController extends Controller
 {
     public function getDataKrsMhs()
     {
+        dd(Krs::make()->getTable(), self::STATUS_SUCCESS);
+
         return 'coba';
     }
 

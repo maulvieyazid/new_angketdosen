@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Gate\AngketDosenController;
+use App\Http\Controllers\API\Gate\AngketDosenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
