@@ -34,6 +34,8 @@ class CheckAngketApiKey
         // Ambil request id
         $id = $request->id;
 
+        if (!$id) return abort('401', 'ID tidak boleh kosong');
+
         // Kode kombinasi untuk dibandingkan dengan hash passcode
         $combination_code =  $id . '_' . config('angket.api_key');
 
