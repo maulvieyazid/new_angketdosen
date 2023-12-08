@@ -20,6 +20,6 @@ class Jdwprk extends Model
         parent::__construct($attributes);
 
         // Jika sudah tutup semester
-        $this->table = session('isTutupSemester') ? 'jdwprk_mf' : 'jdwprk_pw';
+        $this->table = session('smt_aktif') == session('smt_yad') ? 'jdwprk_mf' : 'jdwprk_pw';
     }
 }

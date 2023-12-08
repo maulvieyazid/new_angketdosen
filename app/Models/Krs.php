@@ -20,6 +20,6 @@ class Krs extends Model
         parent::__construct($attributes);
 
         // Jika sudah tutup semester
-        $this->table = session('isTutupSemester') ? 'krs_tf' : 'krs_pw';
+        $this->table = session('smt_aktif') == session('smt_yad') ? 'krs_tf' : 'krs_pw';
     }
 }
