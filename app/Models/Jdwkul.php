@@ -18,5 +18,8 @@ class Jdwkul extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+
+        // Jika sudah tutup semester
+        $this->table = session('isTutupSemester') ? 'jdwkul_mf' : 'jdwkul_pw';
     }
 }
