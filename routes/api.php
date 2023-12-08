@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['check.semester', 'check.angket_api_key'])->group(function () {
-    Route::get('/angket_dosen_gate/get_data_krs_mhs', [AngketDosenController::class, 'getDataKrsMhs'])->name('gate.angket.get_krs_mhs');
+Route::middleware(['check.angket_api_key', 'start.session'])->group(function () {
+
+    Route::get('/angket_dosen_gate/get_data_krs_mhs', [AngketDosenController::class, 'getDataKrsMhs'])
+        ->name('gate.angket.get_krs_mhs')
+        ->middleware('set.semester');
 });
 
-Route::middleware(['check.semester'])->group(function () {
-    Route::get('/angket_dosen_gate/get_daftar_pertanyaan_angket_dosen', [AngketDosenController::class, 'getDaftarPertanyaanAngketDosen'])->name('gate.angket.get_daftar_pertanyaan');
-});
+Route::get('/angket_dosen_gate/get_daftar_pertanyaan_angket_dosen', [AngketDosenController::class, 'getDaftarPertanyaanAngketDosen'])
+    ->name('gate.angket.get_daftar_pertanyaan');
