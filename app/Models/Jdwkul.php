@@ -19,7 +19,7 @@ class Jdwkul extends Model
     {
         parent::__construct($attributes);
 
-        // Jika sudah tutup semester
+        // Set table
         $this->table = session('smt_aktif') == session('smt_yad') ? 'jdwkul_mf' : 'jdwkul_pw';
     }
 }
