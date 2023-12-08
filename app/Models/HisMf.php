@@ -9,7 +9,7 @@ class HisMf extends Model
 {
     use HasFactory;
 
-    protected $table = 'BOBBY21.V_HISMF';
+    protected $table = 'V_HISMF';
 
     public $timestamps = false;
 
@@ -39,6 +39,20 @@ class HisMf extends Model
 
             case 'T':
                 $nama = 'Tugas Akhir';
+                break;
+
+            case 'O':
+                $nama = 'Keluar';
+                break;
+
+            case 'N':
+            case 'A':
+            case 'L':
+                $nama = 'Lulus';
+                break;
+
+            case 'R':
+                $nama = 'Aktif 0 SKS';
                 break;
         }
 
