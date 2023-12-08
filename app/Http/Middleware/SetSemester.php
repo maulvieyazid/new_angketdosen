@@ -6,7 +6,7 @@ use App\Models\Semester;
 use Closure;
 use Illuminate\Http\Request;
 
-class CheckSemester
+class SetSemester
 {
     /**
      * Handle an incoming request.
@@ -20,9 +20,9 @@ class CheckSemester
         // WARNING : FAK_ID default '41010' atau jurusan SI, permintaan DBA
         $semester = Semester::where('fak_id', '41010')->first();
 
-        // Jika "semester yang akan datang" sama dengan "semester yang aktif", maka sudah tutup semester
-        // Jika tidak sama, maka belum tutup semester
-        session(['isTutupSemester' => $semester->smt_yad == $semester->smt_aktif]);
+        $request->session()->put('smt_aktif', $semester->smt_aktif);
+        $request->session()->put('smt_yad', $semester->smt_yad);
+        $request->session()->put('smt_lain', $semester->smt_lain);
 
         return $next($request);
     }

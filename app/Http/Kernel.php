@@ -63,8 +63,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'start.session' => \Illuminate\Session\Middleware\StartSession::class,
         'auth_no_db' => \App\Http\Middleware\AuthNoDb::class,
-        'check.semester' => \App\Http\Middleware\CheckSemester::class,
+        'set.semester' => \App\Http\Middleware\SetSemester::class,
         'check.angket_api_key' => \App\Http\Middleware\CheckAngketApiKey::class,
     ];
 }
