@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Gate\AngketDosenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['check.semester', 'check.angket_api_key'])->group(function () {
+    Route::get('/angket_dosen_gate/get_data_krs_mhs', [AngketDosenController::class, 'getDataKrsMhs'])->name('gate.angket.get_krs_mhs');
+});
+
+Route::middleware(['check.semester'])->group(function () {
+    Route::get('/angket_dosen_gate/get_daftar_pertanyaan_angket_dosen', [AngketDosenController::class, 'getDaftarPertanyaanAngketDosen'])->name('gate.angket.get_daftar_pertanyaan');
 });
