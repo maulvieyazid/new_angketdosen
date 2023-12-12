@@ -40,7 +40,7 @@ class CheckAngketApiKey
         $combination_code =  $id . '_' . config('angket.api_key');
 
         // Jika hash passcode tidak cocok dengan kode kombinasi, maka passcode yang dilemparkan salah
-        if (!Hash::check($combination_code, $passcode)) return response()->json(['message' => 'API Key Aplikasi Angket Dosen tidak sesuai'], 401);
+        if (!Hash::check($combination_code, $passcode)) return response()->json(['message' => 'API Key tidak sesuai'], 401);
 
         return $next($request);
     }
