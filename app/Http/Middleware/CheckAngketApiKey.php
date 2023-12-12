@@ -34,13 +34,13 @@ class CheckAngketApiKey
         // Ambil request id
         $id = $request->id;
 
-        if (!$id) return abort('401', 'ID tidak boleh kosong');
+        if (!$id) return response()->json(['message' => 'ID tidak boleh kosong'], 401);
 
         // Kode kombinasi untuk dibandingkan dengan hash passcode
         $combination_code =  $id . '_' . config('angket.api_key');
 
         // Jika hash passcode tidak cocok dengan kode kombinasi, maka passcode yang dilemparkan salah
-        if (!Hash::check($combination_code, $passcode)) return abort(401, 'API Key Aplikasi Angket Dosen tidak sesuai.');
+        if (!Hash::check($combination_code, $passcode)) return response()->json(['message' => 'API Key Aplikasi Angket Dosen tidak sesuai'], 401);
 
         return $next($request);
     }
