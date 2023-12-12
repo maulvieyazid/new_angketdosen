@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\API\Gate;
 
 use Awobaz\Compoships\Compoships;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Krs extends Model
+class Jdwprk extends Model
 {
     use HasFactory, Compoships;
 
@@ -22,9 +22,8 @@ class Krs extends Model
         parent::__construct($attributes);
 
         // Set table
-        $this->table = session('smt_aktif') == session('smt_yad') ? 'krs_tf' : 'krs_pw';
+        $this->table = session('smt_aktif') == session('smt_yad') ? 'jdwprk_mf' : 'jdwprk_pw';
     }
-
 
     /**
      * The "booted" method of the model.
@@ -35,21 +34,16 @@ class Krs extends Model
     {
         // Custom Select
         static::addGlobalScope('custom_select', function (Builder $builder) {
-            $builder->select('jkul_kelas', 'jkul_klkl_id', 'mhs_nim', 'prk_group')
-                ->selectRaw('substr(mhs_nim, 3, 5) as prodi');
+            $builder->select('kary_nik', 'klkl_id', 'jprk_group', 'prodi')
+                ->selectRaw('AAK_MAN.NAMA_DOSEN(kary_nik) as nama_dosen')
+                ->selectRaw('AAK_MAN.FIND_NAMA_MK(klkl_id) as nama_mk');
         });
     }
 
 
-
     // RELATIONSHIP
-    public function jdwkul()
+    public function krs()
     {
-        return $this->belongsTo(Jdwkul::class, ['jkul_klkl_id', 'jkul_kelas', 'prodi'], ['klkl_id', 'kelas', 'prodi']);
-    }
-
-    public function jdwprk()
-    {
-        return $this->belongsTo(Jdwprk::class, ['jkul_klkl_id', 'prk_group', 'prodi'], ['klkl_id', 'jprk_group', 'prodi']);
+        $this->hasMany(Krs::class, ['jkul_klkl_id', 'prk_group', 'prodi'], ['klkl_id', 'jprk_group', 'prodi']);
     }
 }

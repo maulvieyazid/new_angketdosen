@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\API\Gate;
 
 use Awobaz\Compoships\Compoships;
 use Illuminate\Database\Eloquent\Builder;
