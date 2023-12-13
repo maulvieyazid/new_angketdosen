@@ -10,11 +10,30 @@ class AngketTf extends Model
 {
     use HasFactory;
 
-    protected $table = 'V_ANGKTTF';
+    protected $table = 'PRODI.ANGKET_TF';
 
     public $timestamps = false;
 
     public $incrementing = false;
+
+    protected $fillable = [
+        'nik',
+        'kode_mk',
+        'kelas',
+        'smt',
+        'smt_mk',
+        'kd_angket',
+        'nilai',
+        'tgl_entry',
+        'saran',
+        'soal',
+        'jawab',
+        'prodi',
+    ];
+
+    protected $casts = [
+        'tgl_entry' => 'datetime',
+    ];
 
 
     // RELATIONSHIP
