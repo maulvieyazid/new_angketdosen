@@ -15,4 +15,10 @@ class PesertaAngket extends Model
 
     public $incrementing = false;
 
+    protected $fillable = [
+        'smt',
+        'nim',
+        'kode_mk',
+        'kelas',
+    ];
 }
