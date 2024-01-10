@@ -231,7 +231,8 @@
                                                             $isianBebas = $hpkpp->where('pertanyaan.jenis', AngketMf::ISIAN_BEBAS)->sortBy('kd_angket');
 
                                                             // Ambil nilai rata-rata dari pilihan ganda lalu bulatkan dengan presisi dua angka dibelakang koma
-                                                            $nilRataRata = round($pilihanGanda->avg('nilai'), 2);
+                                                            $nilRataRata = $hpkpp->sum('nilai') / $hpkpp->whereNotNull('nilai')->count();
+                                                            $nilRataRata = round($nilRataRata, 2);
                                                         @endphp
 
                                                         <tbody>
