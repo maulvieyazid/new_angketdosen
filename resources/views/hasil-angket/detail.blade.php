@@ -226,12 +226,13 @@
                                                                 ->where('prodi', $hpk->prodi);
 
                                                             // Pisahkan antara yang jenis nya pilihan ganda dan isian bebas
-                                                            $pilihanGanda = $hpkpp->where('pertanyaan.jenis', AngketMf::PIL_GANDA)->sortBy('kd_angket');
+                                                            $pilihanGanda = $hpkpp->whereNotIn('pertanyaan.jenis', [AngketMf::ISIAN_BEBAS, AngketMf::ISIAN_CAMPUR])->sortBy('kd_angket');
 
                                                             $isianBebas = $hpkpp->where('pertanyaan.jenis', AngketMf::ISIAN_BEBAS)->sortBy('kd_angket');
 
-                                                            // Ambil nilai rata-rata dari pilihan ganda lalu bulatkan dengan presisi dua angka dibelakang koma
+                                                            // Ambil nilai rata-rata dari hasil per kelas per pertanyaan
                                                             $nilRataRata = $hpkpp->sum('nilai') / $hpkpp->whereNotNull('nilai')->count();
+                                                            // Bulatkan dengan presisi dua angka dibelakang koma
                                                             $nilRataRata = round($nilRataRata, 2);
                                                         @endphp
 
