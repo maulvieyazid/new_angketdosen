@@ -17,7 +17,18 @@
 
                 <div class="row g-2 align-items-center">
                     <div class="col">
-                        <a href="{{ route('index.hasil-angket', ['smt' => $smt]) }}" class="btn btn-secondary mb-3">
+                        @php
+                            $route = route('index.hasil-angket', ['smt' => $smt]);
+
+                            $karyawan = auth()->user();
+                            $exclusive = in_array(1, [$karyawan->is_dekan, $karyawan->is_warek_1, $karyawan->is_admin_fakultas, $karyawan->is_kaprodi, $karyawan->is_p3ai]);
+
+                            if (!$exclusive) {
+                                $route = route('home');
+                            }
+                        @endphp
+
+                        <a href="{{ $route }}" class="btn btn-secondary mb-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-narrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                                 stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
