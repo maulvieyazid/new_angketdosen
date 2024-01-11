@@ -28,6 +28,20 @@ class Karyawan extends Authenticatable
     protected $appends = ['inisial'];
 
 
+    // Fungsi ini untuk mengecek bahwa yang login hanya role-role eksekutif
+    public function executive_only()
+    {
+        return in_array(1, [
+            $this->is_p3ai,
+            $this->is_warek_1,
+            $this->is_dekan,
+            $this->is_kaprodi,
+            $this->is_admin_fakultas
+        ]);
+    }
+
+
+
     // ACCESSOR
     public function getInisialAttribute()
     {
