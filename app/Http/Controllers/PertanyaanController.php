@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AngketMf;
+use App\Models\AngketTf;
 use App\Models\NoSrKtr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -20,6 +21,28 @@ class PertanyaanController extends Controller
         $inPeriodeAngket = NoSrKtr::inPeriodeAngket()->count();
 
         return view('pertanyaan.index', compact('pertanyaan', 'inPeriodeAngket'));
+    }
+
+    public function otherPertanyan(Request $req)
+    {
+        // Ambil semua smt yg ada di angkettf untuk dimasukkan ke select
+        $semuaSmt = AngketTf::select('smt')
+            ->distinct()
+            ->orderBy('smt', 'desc')
+            ->get();
+
+        // Kalo gk ada query param "smt", maka langsung return view
+        if (!$req->smt) return view('pertanyaan.otherPertanyaan', compact('semuaSmt'));
+
+        $semuaPertanyaan = AngketTf::query()
+            ->select('kd_angket')
+            ->distinct()
+            ->where('smt', $req->smt)
+            ->with('pertanyaan')
+            ->orderBy('kd_angket')
+            ->get();
+
+        return view('pertanyaan.otherPertanyaan', compact('semuaSmt', 'semuaPertanyaan'));
     }
 
     public function store(Request $req)

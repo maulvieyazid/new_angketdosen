@@ -93,7 +93,7 @@
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                                 <li>
-                                                    <a class="dropdown-item" type="button" href="#">
+                                                    <a class="dropdown-item" type="button" href="{{ route('list.pertanyaan.lain') }}">
                                                         Lihat Pertanyaan Semester Sebelumnya
                                                     </a>
                                                 </li>

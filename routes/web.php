@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hasil-angket/download/excel/{smt}', [HasilAngketController::class, 'downloadExcel'])->name('download-excel.hasil-angket');
 
     Route::get('/pertanyaan', [PertanyaanController::class, 'index'])->name('index.pertanyaan');
+    Route::get('/list-pertanyaan-lainnya', [PertanyaanController::class, 'otherPertanyan'])->name('list.pertanyaan.lain');
 });
 
 
