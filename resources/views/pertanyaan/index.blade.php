@@ -4,7 +4,7 @@
 
 @push('css')
     <!-- Datatables Bootstrap 5 Theme -->
-    <link rel="stylesheet" href="{{ asset('assets/libs/datatables/dataTables.bootstrap5.min.css') }}" />
+    <link href="{{ asset('assets/libs/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
 @endpush
 
 @php
@@ -33,7 +33,7 @@
                     <div class="alert alert-info mb-0 my-2" role="alert">
                         <div class="d-flex">
                             <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <svg class="icon alert-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
                                     <path d="M12 9h.01"></path>
@@ -63,21 +63,44 @@
                         <div class="card">
                             <div class="card-body">
                                 @if (!$inPeriodeAngket)
-                                    <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modalTambahPrtyn">
-                                        + Pertanyaan
-                                    </button>
-                                    <a href="{{ route('koreksi-urut.pertanyaan') }}" class="btn btn-outline-lime mb-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-reorder" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M3 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
-                                            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
-                                            <path d="M17 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
-                                            <path d="M5 11v-3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v3" />
-                                            <path d="M16.5 8.5l2.5 2.5l2.5 -2.5" />
-                                        </svg>
-                                        Koreksi Urutan
-                                    </a>
+                                    <div class="mb-2">
+                                        <button class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#modalTambahPrtyn">
+                                            + Pertanyaan
+                                        </button>
+
+                                        <a class="btn btn-outline-lime me-1" href="{{ route('koreksi-urut.pertanyaan') }}">
+                                            <svg class="icon icon-tabler icon-tabler-reorder" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M3 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+                                                <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+                                                <path d="M17 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+                                                <path d="M5 11v-3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v3" />
+                                                <path d="M16.5 8.5l2.5 2.5l2.5 -2.5" />
+                                            </svg>
+                                            Koreksi Urutan
+                                        </a>
+
+                                        <div class="dropdown d-inline-block">
+                                            <button class="btn border-muted" id="dropdownMenu2" data-bs-toggle="dropdown" type="button" aria-expanded="false">
+                                                <svg class="icon icon-tabler icon-tabler-dots-vertical m-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                </svg>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                <li>
+                                                    <a class="dropdown-item" type="button" href="#">
+                                                        Lihat Pertanyaan Semester Sebelumnya
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
                                 @endif
 
                                 <div class="table-responsive">
@@ -114,7 +137,7 @@
                                                     </td>
                                                     <td class="text-center">
                                                         @if ($prtyn->jenis == AngketMf::PIL_GANDA)
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-details" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                            <svg class="icon icon-tabler icon-tabler-list-details" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                                 stroke-linecap="round" stroke-linejoin="round">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                                 <path d="M13 5h8" />
@@ -126,7 +149,7 @@
                                                             </svg>
                                                             Pilihan Ganda
                                                         @elseif ($prtyn->jenis == AngketMf::ISIAN_BEBAS)
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-writing" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                            <svg class="icon icon-tabler icon-tabler-writing" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                                 stroke-linecap="round" stroke-linejoin="round">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                                 <path d="M20 17v-12c0 -1.121 -.879 -2 -2 -2s-2 .879 -2 2v12l2 2l2 -2z" />
@@ -135,7 +158,7 @@
                                                             </svg>
                                                             Isian Bebas
                                                         @elseif ($prtyn->jenis == AngketMf::ISIAN_CAMPUR)
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-forms" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                            <svg class="icon icon-tabler icon-tabler-forms" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                                 stroke-linecap="round" stroke-linejoin="round">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                                 <path d="M12 3a3 3 0 0 0 -3 3v12a3 3 0 0 0 3 3" />
@@ -163,15 +186,15 @@
                                                     @if (!$inPeriodeAngket)
                                                         <td class="text-center">
                                                             <div class="form-check form-switch d-flex justify-content-center">
-                                                                <input class="form-check-input" type="checkbox" onchange="toggleStatus(this)" {{ $prtyn->status ? 'checked' : '' }} data-enc-pertanyaan="{{ $encPrtyn }}">
+                                                                <input class="form-check-input" data-enc-pertanyaan="{{ $encPrtyn }}" type="checkbox" onchange="toggleStatus(this)" {{ $prtyn->status ? 'checked' : '' }}>
 
                                                                 <div class="spinner-border spinner-border-sm text-secondary d-none ms-1" role="status" style="margin-top: 2px"></div>
                                                             </div>
                                                         </td>
                                                         <td class="text-center">
                                                             <div class="data-pertanyaan" data-enc-pertanyaan="{{ $encPrtyn }}" data-json-pertanyaan="{{ $jsonPrtyn }}">
-                                                                <button type="button" class="btn btn-sm btn-outline" onclick="edit(this)">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                                <button class="btn btn-sm btn-outline" type="button" onclick="edit(this)">
+                                                                    <svg class="icon icon-tabler icon-tabler-edit" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                                         fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                                         <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
@@ -198,24 +221,24 @@
 
 
         <!-- Modal Ubah Pertanyaan -->
-        <div class="modal modal-blur fade" id="modalEditPrtyn" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal modal-blur fade" id="modalEditPrtyn" role="dialog" aria-hidden="true" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Ubah Pertanyaan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close"></button>
                     </div>
                     <form action="{{ route('update.pertanyaan') }}" method="POST" onsubmit="$('#modalEditPrtyn #submitBtn button').prop('disabled', true)">
                         @csrf
                         @method('PUT')
 
-                        <input type="hidden" name="encPrtyn" id="encPrtyn">
+                        <input id="encPrtyn" name="encPrtyn" type="hidden">
 
                         <div class="modal-body">
                             <div class="row mb-3 align-items-end">
                                 <div class="col">
                                     <label class="form-label">Urut</label>
-                                    <input type="number" class="form-control" id="urut" name="urut" min="1" required oninput="$(this).val(Math.max(1, $(this).val()))">
+                                    <input class="form-control" id="urut" name="urut" type="number" min="1" required oninput="$(this).val(Math.max(1, $(this).val()))">
                                 </div>
                             </div>
 
@@ -231,9 +254,9 @@
                                     <label class="form-label">Jenis</label>
                                     <div class="form-selectgroup">
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="jenis" value="{{ AngketMf::PIL_GANDA }}" id="jenis_pg" class="form-selectgroup-input" required>
+                                            <input class="form-selectgroup-input" id="jenis_pg" name="jenis" type="radio" value="{{ AngketMf::PIL_GANDA }}" required>
                                             <span class="form-selectgroup-label">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-details" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                <svg class="icon icon-tabler icon-tabler-list-details" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                     <path d="M13 5h8" />
@@ -247,9 +270,9 @@
                                             </span>
                                         </label>
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_BEBAS }}" id="jenis_esai" class="form-selectgroup-input" required>
+                                            <input class="form-selectgroup-input" id="jenis_esai" name="jenis" type="radio" value="{{ AngketMf::ISIAN_BEBAS }}" required>
                                             <span class="form-selectgroup-label">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-writing" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                <svg class="icon icon-tabler icon-tabler-writing" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                     <path d="M20 17v-12c0 -1.121 -.879 -2 -2 -2s-2 .879 -2 2v12l2 2l2 -2z" />
@@ -285,7 +308,7 @@
                                     <label class="form-label">Status</label>
                                     <div class="d-flex align-items-center">
                                         <div class="form-check form-switch mb-0 me-2">
-                                            <input class="form-check-input" type="checkbox" name="status" id="status" onchange="$('#modalEditPrtyn #statusBadge').html(this.checked ? badge_aktif : badge_non_aktif)">
+                                            <input class="form-check-input" id="status" name="status" type="checkbox" onchange="$('#modalEditPrtyn #statusBadge').html(this.checked ? badge_aktif : badge_non_aktif)">
                                         </div>
                                         <div id="statusBadge">
                                             <span class="badge bg-danger me-1"></span> Non Aktif
@@ -297,19 +320,19 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn me-auto" data-bs-dismiss="modal">
+                            <button class="btn me-auto" data-bs-dismiss="modal" type="button">
                                 Tutup
                             </button>
-                            <button type="button" class="btn btn-primary" id="confirmationBtn" onclick="$('#modalEditPrtyn #submitBtn').removeClass('d-none'); $(this).addClass('d-none')">
+                            <button class="btn btn-primary" id="confirmationBtn" type="button" onclick="$('#modalEditPrtyn #submitBtn').removeClass('d-none'); $(this).addClass('d-none')">
                                 Ubah Pertanyaan
                             </button>
                             <div class="d-flex flex-column d-none" id="submitBtn">
                                 <span>Apakah anda yakin?</span>
                                 <div>
-                                    <button type="submit" class="btn btn-success">
+                                    <button class="btn btn-success" type="submit">
                                         Yakin
                                     </button>
-                                    <button type="button" class="btn btn-secondary" onclick="$('#modalEditPrtyn #confirmationBtn').removeClass('d-none'); $('#modalEditPrtyn #submitBtn').addClass('d-none')">
+                                    <button class="btn btn-secondary" type="button" onclick="$('#modalEditPrtyn #confirmationBtn').removeClass('d-none'); $('#modalEditPrtyn #submitBtn').addClass('d-none')">
                                         Batal
                                     </button>
                                 </div>
@@ -325,12 +348,12 @@
 
 
         <!-- Modal Tambah Pertanyaan -->
-        <div class="modal modal-blur fade" id="modalTambahPrtyn" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal modal-blur fade" id="modalTambahPrtyn" role="dialog" aria-hidden="true" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Tambah Pertanyaan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close"></button>
                     </div>
                     <form action="{{ route('store.pertanyaan') }}" method="POST" onsubmit="$('#modalTambahPrtyn #submitBtn button').prop('disabled', true)">
                         @csrf
@@ -339,7 +362,7 @@
                             <div class="row mb-3 align-items-end">
                                 <div class="col">
                                     <label class="form-label">Urut</label>
-                                    <input type="number" class="form-control" name="urut" min="1" required oninput="$(this).val(Math.max(1, $(this).val()))" value="{{ $pertanyaan->where('status', AngketMf::AKTIF)->max('urut') + 1 }}">
+                                    <input class="form-control" name="urut" type="number" value="{{ $pertanyaan->where('status', AngketMf::AKTIF)->max('urut') + 1 }}" min="1" required oninput="$(this).val(Math.max(1, $(this).val()))">
                                 </div>
                             </div>
 
@@ -355,9 +378,9 @@
                                     <label class="form-label">Jenis</label>
                                     <div class="form-selectgroup">
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="jenis" value="{{ AngketMf::PIL_GANDA }}" class="form-selectgroup-input" checked required>
+                                            <input class="form-selectgroup-input" name="jenis" type="radio" value="{{ AngketMf::PIL_GANDA }}" checked required>
                                             <span class="form-selectgroup-label">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-details" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                <svg class="icon icon-tabler icon-tabler-list-details" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                     <path d="M13 5h8" />
@@ -371,9 +394,9 @@
                                             </span>
                                         </label>
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="jenis" value="{{ AngketMf::ISIAN_BEBAS }}" class="form-selectgroup-input" required>
+                                            <input class="form-selectgroup-input" name="jenis" type="radio" value="{{ AngketMf::ISIAN_BEBAS }}" required>
                                             <span class="form-selectgroup-label">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-writing" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                <svg class="icon icon-tabler icon-tabler-writing" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                     <path d="M20 17v-12c0 -1.121 -.879 -2 -2 -2s-2 .879 -2 2v12l2 2l2 -2z" />
@@ -409,7 +432,7 @@
                                     <label class="form-label">Status</label>
                                     <div class="d-flex align-items-center">
                                         <div class="form-check form-switch mb-0 me-2">
-                                            <input class="form-check-input" type="checkbox" name="status" checked onchange="$('#modalTambahPrtyn #statusBadge').html(this.checked ? badge_aktif : badge_non_aktif)">
+                                            <input class="form-check-input" name="status" type="checkbox" checked onchange="$('#modalTambahPrtyn #statusBadge').html(this.checked ? badge_aktif : badge_non_aktif)">
                                         </div>
                                         <div id="statusBadge">
                                             <span class="badge bg-success me-1"></span> Aktif
@@ -422,19 +445,19 @@
 
 
                         <div class="modal-footer">
-                            <button type="button" class="btn me-auto" data-bs-dismiss="modal">
+                            <button class="btn me-auto" data-bs-dismiss="modal" type="button">
                                 Tutup
                             </button>
-                            <button type="button" class="btn btn-primary" id="confirmationBtn" onclick="$('#modalTambahPrtyn #submitBtn').removeClass('d-none'); $(this).addClass('d-none')">
+                            <button class="btn btn-primary" id="confirmationBtn" type="button" onclick="$('#modalTambahPrtyn #submitBtn').removeClass('d-none'); $(this).addClass('d-none')">
                                 Ubah Pertanyaan
                             </button>
                             <div class="d-flex flex-column d-none" id="submitBtn">
                                 <span>Apakah anda yakin?</span>
                                 <div>
-                                    <button type="submit" class="btn btn-success">
+                                    <button class="btn btn-success" type="submit">
                                         Yakin
                                     </button>
-                                    <button type="button" class="btn btn-secondary" onclick="$('#modalTambahPrtyn #confirmationBtn').removeClass('d-none'); $('#modalTambahPrtyn #submitBtn').addClass('d-none')">
+                                    <button class="btn btn-secondary" type="button" onclick="$('#modalTambahPrtyn #confirmationBtn').removeClass('d-none'); $('#modalTambahPrtyn #submitBtn').addClass('d-none')">
                                         Batal
                                     </button>
                                 </div>
