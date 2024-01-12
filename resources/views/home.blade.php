@@ -107,7 +107,7 @@
                                                 <span class="mx-2"></span>
 
                                                 <!-- Select Prodi -->
-                                                <select class="form-select" id="slctProdi-c2" style="width: 135px" onchange="console.log('coba');">
+                                                <select class="form-select" id="slctProdi-c2" style="width: 135px" onchange="updateChartAvgAllDosenPerSmt()">
                                                     <!-- Menampilkan option ini hanya jika user yg login adalah P3AI, Warek 1, atau Dekan -->
                                                     @if (auth()->user()->is_p3ai || auth()->user()->is_warek_1 || auth()->user()->is_dekan)
                                                         <option value="all">Semua Prodi</option>
@@ -123,7 +123,7 @@
                                                 <span class="me-5"></span>
 
                                                 <!-- Select Dari Semester -->
-                                                <select class="form-select form-select-sm pilih-smt" id="dariSmt-c2" style="width: 80px" onchange="/* updateChartAvgNilaiPerSmt(this.value, $('#hinggaSmt').val()) */">
+                                                <select class="form-select form-select-sm pilih-smt" id="dariSmt-c2" style="width: 80px" onchange="updateChartAvgAllDosenPerSmt()">
                                                     @foreach ($chart_SD->semuaSmt as $smt)
                                                         <option value="{{ $smt }}" {{ $smt == $chart_SD->dari ? 'selected' : null }}>
                                                             {{ $smt }}
@@ -134,7 +134,7 @@
                                                 <span class="mx-2">s/d</span>
 
                                                 <!-- Select Hingga Semester -->
-                                                <select class="form-select form-select-sm pilih-smt" id="hinggaSmt-c2" style="width: 80px" onchange="/* updateChartAvgNilaiPerSmt($('#dariSmt').val(), this.value) */">
+                                                <select class="form-select form-select-sm pilih-smt" id="hinggaSmt-c2" style="width: 80px" onchange="updateChartAvgAllDosenPerSmt()">
                                                     @foreach ($chart_SD->semuaSmt as $smt)
                                                         <option value="{{ $smt }}" {{ $smt == $chart_SD->hingga ? 'selected' : null }}>
                                                             {{ $smt }}
@@ -181,7 +181,9 @@
             const nik = "{{ auth()->user()->nik }}";
 
             let url = "{{ route('chart.avg-per-smt', ['nik' => ':nik', 'dari' => ':dari', 'hingga' => ':hingga']) }}";
-            url = url.replace(':nik', nik).replace(':dari', dari).replace(':hingga', hingga);
+            url = url.replace(':nik', nik)
+                .replace(':dari', dari)
+                .replace(':hingga', hingga);
 
             const response = await axios.get(url, {
                 retry: 2
@@ -254,22 +256,50 @@
     </script>
 
 
-    {{-- <script>
+    <script>
         function updateProdi_c2(id_fakultas) {
             const slctElm = $('#slctProdi-c2');
-            // Sembunyikan semua prodi
+            // Sembunyikan semua option prodi
             slctElm.find('option').addClass('d-none');
 
             // Tampilkan prodi yang data fakultas nya sama dengan parameter id_fakultas
             slctElm.find(`option[data-fakultas=${id_fakultas}]`).removeClass('d-none');
 
-            // Tampilkan option semua prodi
+            // Tampilkan option 'semua prodi'
             slctElm.find("option[value='all']").removeClass('d-none');
 
-            // Set option semua prodi sebagai default
+            // Set option 'semua prodi' sebagai default
             slctElm.val('all').trigger('change');
         }
 
+
+        async function updateChartAvgAllDosenPerSmt() {
+            // Ambil nilai-nilai yang diperlukan
+            const id_fakultas = $('#slctFakultas-c2').val();
+            const id_prodi = $('#slctProdi-c2').val();
+            const dari = $('#dariSmt-c2').val();
+            const hingga = $('#hinggaSmt-c2').val();
+
+            // Rangkai URL
+            let url = "{{ route('chart.avg-all-dosen-per-smt', ['id_fakultas' => ':id_fakultas', 'id_prodi' => ':id_prodi', 'dari' => ':dari', 'hingga' => ':hingga']) }}";
+            url = url.replace(':id_fakultas', id_fakultas)
+                .replace(':id_prodi', id_prodi)
+                .replace(':dari', dari)
+                .replace(':hingga', hingga);
+
+            // Kirim Request
+            const response = await axios.get(url, {
+                retry: 2
+            });
+            const data = await response.data;
+
+            // Update data series chart
+            chartAvgNilaiAllDosenPerSmt.updateOptions({
+                series: [{
+                    data: data,
+                }]
+            });
+        }
 
 
         const chartAvgNilaiAllDosenPerSmt = new ApexCharts(
@@ -279,16 +309,6 @@
                     height: '300px',
                     toolbar: {
                         show: false,
-                    },
-                    events: {
-                        dataPointSelection: async function(event, chartContext, config) {
-                            const dataNilai = config.w.globals.initialSeries[config.seriesIndex].data[config.dataPointIndex];
-
-                            let url = "{{ route('detail.hasil-angket', ['data' => ':data']) }}";
-                            url = url.replace(':data', dataNilai.encData);
-
-                            window.location.href = url;
-                        },
                     },
                 },
                 plotOptions: {
@@ -317,39 +337,16 @@
                 },
                 series: [{
                     name: 'Rata-rata',
-                    data: [{
-                            x: '201',
-                            y: '20.00'
-                        },
-                        {
-                            x: '202',
-                            y: '11.23'
-                        },
-                        {
-                            x: '211',
-                            y: '14.65'
-                        },
-                        {
-                            x: '212',
-                            y: '18.78'
-                        },
-                        {
-                            x: '221',
-                            y: '13.31'
-                        },
-                        {
-                            x: '222',
-                            y: '15.09'
-                        },
-                        {
-                            x: '231',
-                            y: '10.00'
-                        }
-                    ],
+                    data: [],
                 }]
             }
         );
 
         chartAvgNilaiAllDosenPerSmt.render();
-    </script> --}}
+
+        document.addEventListener('DOMContentLoaded', function(e) {
+            // Set nilai awal chart
+            updateChartAvgAllDosenPerSmt();
+        });
+    </script>
 @endpush

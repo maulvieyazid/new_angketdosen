@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth_no_db'])->group(function () {
 
     Route::get('/chart/avg-nilai-per-smt/{nik}/{dari}/{hingga}', [HomeController::class, 'getAvgPerSmt'])->name('chart.avg-per-smt');
+    Route::get('/chart/avg-nilai-all-dosen-per-smt/{id_fakultas}/{id_prodi}/{dari}/{hingga}', [HomeController::class, 'getAvgAllDosenPerSmt'])->name('chart.avg-all-dosen-per-smt');
 
     Route::get('/pertanyaan/correction/urut', [PertanyaanController::class, 'koreksiUrut'])->name('koreksi-urut.pertanyaan');
     Route::post('/pertanyaan/store', [PertanyaanController::class, 'store'])->name('store.pertanyaan');
