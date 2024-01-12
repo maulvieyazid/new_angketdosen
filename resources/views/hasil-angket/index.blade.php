@@ -8,7 +8,7 @@
     <!-- Select2 Bootstrap 5 Theme -->
     <link href="{{ asset('assets/libs/select2/theme/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet" />
     <!-- Datatables Bootstrap 5 Theme -->
-    <link rel="stylesheet" href="{{ asset('assets/libs/datatables/dataTables.bootstrap5.min.css') }}" />
+    <link href="{{ asset('assets/libs/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
 @endpush
 
 @php
@@ -54,7 +54,7 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                    <button type="button" class="btn btn-primary ms-2" onclick="goToSemester()">
+                                    <button class="btn btn-primary ms-2" type="button" onclick="goToSemester()">
                                         Tampilkan
                                     </button>
                                 </div>
@@ -76,9 +76,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-md-flex justify-content-between mb-3">
-                                    <h3 class="card-title">Dosen mengajar di semester 231</h3>
-                                    <a href="{{ route('download-excel.hasil-angket', ['smt' => request('smt')]) }}" class="btn btn-success" target="_blank">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-type-xls" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    <h3 class="card-title">Dosen mengajar di semester {{ request('smt') }}</h3>
+                                    <a class="btn btn-success" href="{{ route('download-excel.hasil-angket', ['smt' => request('smt')]) }}" target="_blank">
+                                        <svg class="icon icon-tabler icon-tabler-file-type-xls" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M14 3v4a1 1 0 0 0 1 1h4" />
@@ -128,8 +128,8 @@
 
                                                             $route = route('detail.hasil-angket', $data);
                                                         @endphp
-                                                        <a href="{{ $route }}" class="btn btn-outline-primary w-100 btn-sm">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                        <a class="btn btn-outline-primary w-100 btn-sm" href="{{ $route }}">
+                                                            <svg class="icon icon-tabler icon-tabler-eye" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                                 stroke-linecap="round" stroke-linejoin="round">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                                 <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
