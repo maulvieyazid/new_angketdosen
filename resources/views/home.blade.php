@@ -229,9 +229,6 @@
                 dataLabels: {
                     enabled: true,
                 },
-                theme: {
-                    palette: 'palette1',
-                },
                 legend: {
                     show: false,
                 },
@@ -317,19 +314,38 @@
         const chartAvgNilaiAllDosenPerSmt = new ApexCharts(
             document.querySelector('#chartAvgNilaiAllDosenPerSmt'), {
                 chart: {
-                    type: 'bar',
+                    type: 'line',
                     height: '300px',
                     toolbar: {
                         show: false,
                     },
+                    events: {
+                        click: async function(event, chartContext, config) {
+                            // Kalo point yang diklik index nya kurang dari 0 maka return
+                            if (config.dataPointIndex < 0) return;
+
+                            const smt = config.globals.categoryLabels[config.dataPointIndex];
+
+                            let url = "{{ route('index.hasil-angket', ['smt' => 'p_smt']) }}";
+                            url = url.replace('p_smt', smt);
+
+                            window.location.href = url;
+                        },
+                    },
                 },
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                    }
+                stroke: {
+                    curve: 'straight',
                 },
-                theme: {
-                    palette: 'palette1',
+                markers: {
+                    size: 1,
+                },
+                dataLabels: {
+                    enabled: true,
+                },
+                grid: {
+                    padding: {
+                        left: 30,
+                    },
                 },
                 colors: ['#EA3546'],
                 legend: {
@@ -339,7 +355,7 @@
                     enabled: true,
                     x: {
                         formatter: function(value, opts) {
-                            const smt = opts.w.globals.labels[opts.dataPointIndex];
+                            const smt = opts.w.globals.categoryLabels[opts.dataPointIndex];
                             return `Semester ${smt}`;
                         },
                     },
