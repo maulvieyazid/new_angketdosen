@@ -51,7 +51,7 @@ class AngketDosenController extends Controller
 
         $krs = $krs->get();
 
-        return $this->sendApiResponseSuccess($krs->toJson());
+        return $this->sendApiResponseSuccess($krs);
     }
 
     public function getDaftarPertanyaanAngketDosen()
@@ -60,7 +60,7 @@ class AngketDosenController extends Controller
             ->orderBy('urut')
             ->get();
 
-        return $this->sendApiResponseSuccess($pertanyaan->toJson());
+        return $this->sendApiResponseSuccess($pertanyaan);
     }
 
 
