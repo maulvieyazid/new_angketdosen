@@ -21,4 +21,12 @@ class KategoriAngket extends Model
         'kd_kategori',
         'nama_kategori',
     ];
+
+
+
+    // RELATIONSHIP
+    public function pertanyaan()
+    {
+        return $this->hasMany(AngketMf::class, 'kd_kategori', 'kd_kategori');
+    }
 }
