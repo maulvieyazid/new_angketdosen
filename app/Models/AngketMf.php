@@ -31,5 +31,13 @@ class AngketMf extends Model
         'jenis',
         'kd_induk',
         'urut',
+        'kd_kategori',
     ];
+
+
+    // RELATIONSHIP
+    public function kategori()
+    {
+        return $this->belongsTo(KategoriAngket::class, 'kd_kategori', 'kd_kategori');
+    }
 }
