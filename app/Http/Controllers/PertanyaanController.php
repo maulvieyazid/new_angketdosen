@@ -199,12 +199,12 @@ class PertanyaanController extends Controller
         // Lalu decode json nya
         $encPrtyn = json_decode($encPrtyn, false);
 
-        // Langsung update status pertanyaan dengan kd_angket dari data enkripsi,
-        // tanpa di select terlebih dahulu
-        AngketMf::where('kd_angket', $encPrtyn->kd_angket)
-            ->update([
-                'status' => !$req->status ? 0 : 1
-            ]);
+        // Ambil data angket
+        $angket = AngketMf::find($encPrtyn->kd_angket);
+
+        // Ubah status nya
+        $angket->status = !$req->status ? 0 : 1;
+        $angket->save();
 
         return response()->json([
             'status' => 'success'
@@ -213,6 +213,10 @@ class PertanyaanController extends Controller
 
     public function koreksiUrut()
     {
+        /* Fungsi ini digunakan untuk memperbaiki urutan dari pertanyaan yang aktif
+         | dan juga untuk menghapus urutan dari pertanyaan yang tidak aktif
+        */
+
         $angketMf = AngketMf::make()->getTable();
 
         $sql = "MERGE INTO $angketMf target
@@ -227,6 +231,15 @@ class PertanyaanController extends Controller
         ";
 
         DB::statement($sql);
+
+        // Ambil semua pertanyaan yang tidak aktif
+        $semuaPertanyaan = AngketMf::where('status', AngketMf::NON_AKTIF)->get();
+
+        // Lakukan looping untuk menghapus nilai urut dari masing-masing data pertanyaan
+        foreach ($semuaPertanyaan as $prtyn) {
+            $prtyn->urut = null;
+            $prtyn->save();
+        }
 
         return redirect()->route('index.pertanyaan')->with('success', 'Urutan pertanyaan berhasil dikoreksi.');
     }
