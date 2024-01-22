@@ -94,13 +94,23 @@ class HasilAngketController extends Controller
         // Ambil nik-nik dosen yang bisa dilihat oleh user yang login
         $nik = AngketTf::dosenMengajarDiSmt($smt)->get()->pluck('nik')->all();
 
-        // Ambil hasil angker per kelas per dosen sesuai dengan smt dan nik yang diberikan
+        // Ambil hasil angket per kelas per dosen sesuai dengan smt dan nik yang diberikan
         $hasilPerKelasPerDosen = AngketTf::query()
             ->hasilPerKelasPerDosen($smt, $nik)
             ->with(['karyawan' => function ($karyawan) {
                 $karyawan->select('nik', 'bagian')->with('departemen');
             }])
             ->get();
+
+
+        // Grouping hasil angket per nik dosen
+        // lalu hitung rata-rata nilai per nik dosen
+        $rataRataPerNik = $hasilPerKelasPerDosen
+            ->groupBy('nik')
+            ->map(function ($item, $key) {
+                return round($item->avg('nilai'), 2);
+            });
+
 
         // Ambil semua jawaban esai
         $semuaJwbnEsai = AngketTf::query()
@@ -111,23 +121,36 @@ class HasilAngketController extends Controller
             ->get();
 
 
+        // Ini digunakan untuk menampung nilai range baris per nik dosen
+        $rows = [];
+
+        // Index baris dimulai dari 2 karena index pertama akan diisi oleh header
+        $indexRow = 2;
+
         // Set header
         $data = [
             [
-                '<style border="thin"><center>' . "Semester" . '</center></style>',
-                '<style border="thin"><center>' . "Prodi" . '</center></style>',
-                '<style border="thin"><center>' . "NIK" . '</center></style>',
-                '<style border="thin"><center>' . "Nama Dosen" . '</center></style>',
-                '<style border="thin"><center>' . "Bagian" . '</center></style>',
-                '<style border="thin"><center>' . "Kode MK" . '</center></style>',
-                '<style border="thin"><center>' . "Nama MK" . '</center></style>',
-                '<style border="thin"><center>' . "Kelas" . '</center></style>',
-                '<style border="thin"><center>' . "Nilai Rata-rata" . '</center></style>',
-                '<style border="thin"><center>' . "Keluhan" . '</center></style>',
+                '<style border="thin"><center>' . "Semester" . '</center></style>', // <- Kolom A
+                '<style border="thin"><center>' . "Prodi" . '</center></style>', // <- Kolom B
+                '<style border="thin"><center>' . "NIK" . '</center></style>', // <- Kolom C
+                '<style border="thin"><center>' . "Nama Dosen" . '</center></style>', // <- Kolom D
+                '<style border="thin"><center>' . "Bagian" . '</center></style>', // <- Kolom E
+                '<style border="thin"><center>' . "Kode MK" . '</center></style>', // <- Kolom F
+                '<style border="thin"><center>' . "Nama MK" . '</center></style>', // <- Kolom G
+                '<style border="thin"><center>' . "Kelas" . '</center></style>', // <- Kolom H
+                '<style border="thin"><center>' . "Nilai Rata-rata Per MK" . '</center></style>', // <- Kolom I
+                '<style border="thin"><center>' . "Nilai Rata-rata Per Dosen" . '</center></style>', // <- Kolom J
+                '<style border="thin"><center>' . "Keluhan" . '</center></style>', // <- Kolom K
             ],
         ];
 
         foreach ($hasilPerKelasPerDosen as $hpkpd) {
+
+            // Masukkan nilai indexRow dengan nik sebagai key nya ke dalam array rows
+            $rows[$hpkpd->nik][] = $indexRow;
+
+            // Increment nilai indexRow
+            $indexRow++;
 
             // Filter jawaban esai sesuai matakuliah dan dosen
             // Lalu gabungkan dengan pemisah " | "
@@ -138,6 +161,8 @@ class HasilAngketController extends Controller
                 ->where('nik', $hpkpd->nik)
                 ->implode('saran', ' | ');
 
+            // Isi nilai dari tiap-tiap header
+            // NOTE : Sesuaikan posisi nilai dengan posisi header nya
             $data[] = [
                 $smt,
                 $hpkpd->prodi,
@@ -148,11 +173,10 @@ class HasilAngketController extends Controller
                 $hpkpd->nama_mk,
                 '<center>' . $hpkpd->kelas . '</center>',
                 '<center>' . $hpkpd->nilai . '</center>',
+                '<center><middle>' . $rataRataPerNik->get($hpkpd->nik, 0) . '</middle></center>',
                 $keluhan,
             ];
         }
-
-
 
         $xlsx = SimpleXLSXGen::fromArray($data);
         $xlsx->setDefaultFontSize(11);
@@ -166,7 +190,21 @@ class HasilAngketController extends Controller
         $xlsx->setColWidth(6, 9); // <- Kode MK
         $xlsx->setColWidth(7, 38); // <- Nama MK
         $xlsx->setColWidth(8, 6); // <- Kelas
-        $xlsx->setColWidth(9, 14); // <- Nilai Rata-rata
+        $xlsx->setColWidth(9, 25); // <- Nilai Rata-rata Per MK
+        $xlsx->setColWidth(10, 25); // <- Nilai Rata-rata Per Dosen
+
+        // Lakukan looping pada array rows untuk melakukan merge cells
+        foreach ($rows as $nik => $rangeRows) {
+            // ini adalah Kolom 'Nilai Rata-rata Per Dosen', jika posisinya berubah, maka ubah juga nilai ini
+            $column = "J";
+
+            // Ini adalah nilai min dan max untuk range baris per nik dosen
+            // Nilai ini digunakan untuk melakukan merge cells
+            $minRange = min($rangeRows);
+            $maxRange = max($rangeRows);
+
+            $xlsx->mergeCells("{$column}{$minRange}:{$column}{$maxRange}");
+        }
 
         $xlsx->downloadAs("Hasil Angket Per Kelas Per Dosen Semester $smt.xlsx");
     }
