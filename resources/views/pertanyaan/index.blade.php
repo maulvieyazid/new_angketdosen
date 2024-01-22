@@ -63,7 +63,7 @@
                         <div class="card">
                             <div class="card-body">
                                 @if (!$inPeriodeAngket)
-                                    <div class="mb-2">
+                                    <div class="mb-3">
                                         <button class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#modalTambahPrtyn">
                                             + Pertanyaan
                                         </button>
@@ -109,6 +109,7 @@
                                             <tr>
                                                 <th class="text-center bg-primary-subtle w-0">Urut</th>
                                                 <th class="text-center bg-primary-subtle">Uraian</th>
+                                                <th class="text-center bg-primary-subtle">Kategori</th>
                                                 <th class="text-center bg-primary-subtle" style="width: 14.5%">Jenis</th>
                                                 <th class="text-center bg-primary-subtle" style="width: 11%">Status</th>
                                                 <!-- Tampilkan ini kalau bukan di periode angket dosen -->
@@ -134,6 +135,9 @@
                                                     </td>
                                                     <td>
                                                         {{ $prtyn->uraian }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $prtyn->kategori->nama_kategori ?? null }}
                                                     </td>
                                                     <td class="text-center">
                                                         @if ($prtyn->jenis == AngketMf::PIL_GANDA)

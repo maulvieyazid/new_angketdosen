@@ -63,7 +63,7 @@
                         <div class="card">
                             <div class="card-body">
                                 @if (!$inPeriodeAngket)
-                                    <div class="mb-2">
+                                    <div class="mb-3">
                                         <button class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#modalTambahKtgr">
                                             + Kategori
                                         </button>

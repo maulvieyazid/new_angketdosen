@@ -14,6 +14,7 @@ class PertanyaanController extends Controller
     public function index()
     {
         $pertanyaan = AngketMf::query()
+            ->with('kategori')
             ->orderBy('status', 'desc')
             ->orderBy('urut')
             ->get();
