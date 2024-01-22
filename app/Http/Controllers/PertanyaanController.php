@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AngketMf;
 use App\Models\AngketTf;
+use App\Models\KategoriAngket;
 use App\Models\NoSrKtr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -21,7 +22,9 @@ class PertanyaanController extends Controller
 
         $inPeriodeAngket = NoSrKtr::inPeriodeAngket()->count();
 
-        return view('pertanyaan.index', compact('pertanyaan', 'inPeriodeAngket'));
+        $semuaKategori = KategoriAngket::orderBy('kd_kategori')->get();
+
+        return view('pertanyaan.index', compact('pertanyaan', 'inPeriodeAngket', 'semuaKategori'));
     }
 
     public function otherPertanyan(Request $req)
@@ -75,11 +78,12 @@ class PertanyaanController extends Controller
 
         // Insert
         AngketMf::create([
-            'kd_angket' => $newkode,
-            'uraian'    => $req->uraian,
-            'status'    => isset($req->status) ? 1 : 0,
-            'jenis'     => $req->jenis,
-            'urut'      => $urut,
+            'kd_angket'   => $newkode,
+            'uraian'      => $req->uraian,
+            'status'      => isset($req->status) ? 1 : 0,
+            'jenis'       => $req->jenis,
+            'urut'        => $urut,
+            'kd_kategori' => $req->kd_kategori,
         ]);
 
         return redirect()->route('index.pertanyaan')->with('success', 'Pertanyaan berhasil ditambahkan.');
@@ -120,6 +124,7 @@ class PertanyaanController extends Controller
         $angketMf->status = isset($req->status) ? 1 : 0;
         $angketMf->jenis = $req->jenis;
         $angketMf->urut = $urut;
+        $angketMf->kd_kategori = $req->kd_kategori;
         $angketMf->save();
 
         return redirect()->route('index.pertanyaan')->with('success', 'Pertanyaan berhasil diubah.');

@@ -5,6 +5,10 @@
 @push('css')
     <!-- Datatables Bootstrap 5 Theme -->
     <link href="{{ asset('assets/libs/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
+    <!-- Select2 -->
+    <link href="{{ asset('assets/libs/select2/select2.min.css') }}" rel="stylesheet" />
+    <!-- Select2 Bootstrap 5 Theme -->
+    <link href="{{ asset('assets/libs/select2/theme/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet" />
 @endpush
 
 @php
@@ -153,8 +157,8 @@
                                                             </svg>
                                                             Pilihan Ganda
                                                         @elseif ($prtyn->jenis == AngketMf::ISIAN_BEBAS)
-                                                            <svg class="icon icon-tabler icon-tabler-writing" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                                                stroke-linecap="round" stroke-linejoin="round">
+                                                            <svg class="icon icon-tabler icon-tabler-writing" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                                fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                                 <path d="M20 17v-12c0 -1.121 -.879 -2 -2 -2s-2 .879 -2 2v12l2 2l2 -2z" />
                                                                 <path d="M16 7h4" />
@@ -250,6 +254,19 @@
                                 <div class="col">
                                     <label class="form-label">Uraian</label>
                                     <textarea class="form-control" id="uraian" name="uraian" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-end">
+                                <div class="col">
+                                    <label class="form-label">Kategori</label>
+                                    <select class="select-kategori" id="kd_kategori" name="kd_kategori">
+                                        @foreach ($semuaKategori as $ktgr)
+                                            <option value="{{ $ktgr->kd_kategori }}">
+                                                {{ $ktgr->nama_kategori }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
 
@@ -379,6 +396,19 @@
 
                             <div class="row mb-3 align-items-end">
                                 <div class="col">
+                                    <label class="form-label">Kategori</label>
+                                    <select class="select-kategori" name="kd_kategori">
+                                        @foreach ($semuaKategori as $ktgr)
+                                            <option value="{{ $ktgr->kd_kategori }}">
+                                                {{ $ktgr->nama_kategori }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-end">
+                                <div class="col">
                                     <label class="form-label">Jenis</label>
                                     <div class="form-selectgroup">
                                         <label class="form-selectgroup-item">
@@ -485,6 +515,8 @@
     <script src="{{ asset('assets/libs/datatables/dataTables.bootstrap5.min.js') }}"></script>
     <!-- Notiflix Notify -->
     <script src="{{ asset('assets/libs/notiflix/notiflix-notify-aio-3.2.6.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -492,6 +524,15 @@
                 order: [] // <- Mematikan order saat inisialisasi
             });
 
+            // Inisialisasi select2 untuk semua elemen yang memiliki class 'select-kategori'
+            $('.select-kategori').each(function() {
+                const modalParent = $(this).closest('div.modal');
+
+                $(this).select2({
+                    theme: 'bootstrap-5',
+                    dropdownParent: modalParent,
+                });
+            })
         });
 
         // Template untuk badge status aktif dan non aktif
@@ -556,6 +597,7 @@
             // Set data pertanyaan ke input modal
             $('#urut').val(pertanyaan.urut);
             $('#uraian').val(pertanyaan.uraian);
+            $('#kd_kategori').val(pertanyaan.kd_kategori).trigger('change');
             $(`input[type="radio"][name="jenis"][value="${pertanyaan.jenis}"]`).prop('checked', true);
             $('#status').prop('checked', parseInt(pertanyaan.status) ? true : false).trigger('change');
 
