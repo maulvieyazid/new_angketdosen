@@ -449,7 +449,7 @@
                                 Tutup
                             </button>
                             <button class="btn btn-primary" id="confirmationBtn" type="button" onclick="$('#modalTambahPrtyn #submitBtn').removeClass('d-none'); $(this).addClass('d-none')">
-                                Ubah Pertanyaan
+                                Simpan Pertanyaan
                             </button>
                             <div class="d-flex flex-column d-none" id="submitBtn">
                                 <span>Apakah anda yakin?</span>
