@@ -34,7 +34,8 @@ class AngketDosenController extends Controller
         $sts_mhs = HisMf::query()
             ->where('semester', session('smt_yad'))
             ->where('mhs_nim', $nim)
-            ->first();
+            ->first()
+            ->sts_mhs ?? null;
 
         // Kalo status nya bukan [null, 'T', 'X'], maka return array kosong
         $allowed_sts = [null, 'T', 'X'];
