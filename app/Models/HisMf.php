@@ -9,7 +9,7 @@ class HisMf extends Model
 {
     use HasFactory;
 
-    protected $table = 'V_HISMF';
+    protected $table = 'HIS_MF';
 
     public $timestamps = false;
 
