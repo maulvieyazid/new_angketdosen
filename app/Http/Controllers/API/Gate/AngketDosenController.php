@@ -39,7 +39,7 @@ class AngketDosenController extends Controller
         // Kalo status nya bukan [null, 'T', 'X'], maka return array kosong
         $allowed_sts = [null, 'T', 'X'];
         // TEMPORARY : karena data di DB 23 tidak sesuai, maka untuk sementara pengecekan ini di skip, jika sudah masuk ke DB 15, maka buka komentar pengecekan ini
-        /* if (!in_array($sts_mhs, $allowed_sts)) return $this->sendApiResponseSuccess(json_encode([])); */
+        if (!in_array($sts_mhs, $allowed_sts)) return $this->sendApiResponseSuccess([]);
 
         // Ambil data krs mhs
         $krs = Krs::query()
